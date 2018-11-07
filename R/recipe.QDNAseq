@@ -1,0 +1,6 @@
+Bootstrap:singularity
+From:brucemoran:singularity:centos7-r-3.5.1
+
+%post
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("devtools", "ggplot2", "tidyverse", "dplyr", "pheatmap", "QDNAseq", "QDNAseq.hg19", "PSCBS", "matrixStats", "ggplot2", "caTools"), dependencies=TRUE, update=FALSE, ask=FALSE)'
