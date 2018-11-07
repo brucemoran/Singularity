@@ -1,5 +1,5 @@
 Bootstrap:shub
-From:brucemoran/Singularity:recipe.CentOs7-R_3.5.1
+From:brucemoran/Singularity:centos7-r_3.5.1
 
 %post
     #BiocManager to install packages
