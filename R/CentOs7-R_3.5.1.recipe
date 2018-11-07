@@ -1,0 +1,13 @@
+Bootstrap:docker
+From:centos:centos7.4.1708
+
+%post
+    yum -y install epel-release
+    yum -y install R-3.5.1-1.el7.x86_64
+
+    ##locales
+    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C' >> $SINGULARITY_ENVIRONMENT
+
+    #BiocManager to allow further install of packages
+    mkdir /usr/share/doc/R-3.5.1/html
+    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T)'
