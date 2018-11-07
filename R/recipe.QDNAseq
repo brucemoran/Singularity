@@ -1,5 +1,5 @@
-Bootstrap:singularity
-From:brucemoran:singularity:centos7-r-3.5.1
+Bootstrap:shub
+From:brucemoran/singularity/centos7-r-3.5.1
 
 %post
     #BiocManager to install packages
