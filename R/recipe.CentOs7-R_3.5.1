@@ -2,7 +2,10 @@ Bootstrap:docker
 From:centos:centos7.4.1708
 
 %post
-    yum -y install epel-release
+    yum -y groupinstall "Development Tools"
+    yum -y install epel-release \
+                   git \
+                   wget
     yum -y install R-3.5.1-1.el7.x86_64
 
     ##locales

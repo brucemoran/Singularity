@@ -2,5 +2,8 @@ Bootstrap:shub
 From:brucemoran/Singularity:centos7-r_3.5.1
 
 %post
+    ##need Curl
+    yum -y install libcurl-devel
+
     #BiocManager to install packages
-    R --slave -e 'library("BiocManager"); BiocManager::install(c("QDNAseq", "QDNAseq.hg19", "PSCBS", "matrixStats", "ggplot2", "caTools"), dependencies=TRUE, update=FALSE, ask=FALSE)'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("QDNAseq", "QDNAseq.hg19", "PSCBS", "matrixStats", "ggplot2", "caTools"), dependencies=TRUE, update=TRUE, ask=FALSE)'
