@@ -1,0 +1,71 @@
+Bootstrap: docker
+From: ubuntu:latest
+
+%post
+  # Get all apt dependencies
+  apt-get -y update
+  apt-get -y install software-properties-common
+  apt-get install -y --no-install-recommends apt-utils
+  add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  apt-get -y install \
+              gcc-8 g++-8 \
+              build-essential \
+              make \
+              wget \
+              autotools-dev \
+              libicu-dev \
+              git \
+              curl \
+              libcurl4-openssl-dev \
+              pkg-config \
+              autoconf \
+              libbz2-dev \
+              liblzma-dev \
+              zlib1g-dev \
+              openssl \
+              libssl-dev \
+              libcrypto++-dev
+  CC=gcc-8
+  CXX=g++-8
+  echo 'export CC=gcc-8 CXX=g++-8' >> $SINGULARITY_ENVIRONMENT
+
+  # Install CMake
+  if [[ ! -d /usr/local/src ]];then mkdir -p /usr/local/src; fi
+  if [[ ! -d /usr/local/bin ]];then mkdir -p /usr/local/bin; fi
+
+  cd /usr/local/src
+  wget https://cmake.org/files/v3.11/cmake-3.11.4.tar.gz
+  tar -xzvf cmake-3.11.4.tar.gz
+  rm cmake-3.11.4.tar.gz
+  cd cmake-3.11.4
+  ./bootstrap --prefix=/usr/local
+  make -j2
+  make install
+
+  # Install Boost
+  cd /usr/local/src
+  wget -O boost_1_68_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.68.0/boost_1_68_0.tar.gz/download
+  tar xzvf boost_1_68_0.tar.gz
+  rm boost_1_68_0.tar.gz
+  cd boost_1_68_0
+  ./bootstrap.sh --prefix=/usr/local --without-libraries=python,mpi
+  ./b2 -j2 toolset=gcc-8 cxxflags="-std=c++14"
+  ./b2 install
+
+  # Install htslib
+  cd /usr/local/src
+  git clone -b master https://github.com/samtools/htslib.git
+  cd htslib
+  autoheader
+  autoconf
+  ./configure
+  make -j2
+  make install
+
+  # Install Octopus
+  cd /usr/local/src
+  git clone -b develop https://github.com/luntergroup/octopus.git
+  cd octopus
+  ./scripts/install.py
+  ldconfig
+  cp /usr/local/src/octopus/bin/octopus /usr/bin/
