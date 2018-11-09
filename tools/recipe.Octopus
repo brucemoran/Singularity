@@ -64,8 +64,9 @@ From: ubuntu:latest
 
   # Install Octopus
   cd /usr/local/src
-  git clone -b develop https://github.com/luntergroup/octopus.git
-  cd octopus
+  wget https://github.com/luntergroup/octopus/archive/v0.5.2-beta.tar.gz
+  tar -xf v0.5.2-beta.tar.gz
+  cd octopus-0.5.2-beta/
   ./scripts/install.py
   ldconfig
   cp /usr/local/src/octopus/bin/octopus /usr/bin/
