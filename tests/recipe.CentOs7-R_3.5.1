@@ -2,5 +2,6 @@ Bootstrap:docker
 From:centos:centos7.4.1708
 
 %post
-    yum -y groupinstall "Development Tools" --setopt=group_package_types=mandatory,default,optional
-  
+    yum -y groups mark install "Development Tools"
+    yum -y groups mark convert "Development Tools"
+    yum -y groupinstall "Development Tools"
