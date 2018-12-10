@@ -2,7 +2,7 @@ Bootstrap:docker
 From:centos:centos7.4.1708
 
 %post
-    yum -y groupinstall "Development Tools" "X Window System" "GNOME Desktop" "Graphical Administration Tools"
+    yum -y groupinstall "Development Tools" "X Window System" "GNOME Desktop" "Graphical Administration Tools" --setopt=group_package_types=mandatory,default,optional
     yum -y install epel-release \
                    git \
                    wget \
