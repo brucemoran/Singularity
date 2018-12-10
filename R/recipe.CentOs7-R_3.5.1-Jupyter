@@ -1,0 +1,31 @@
+Bootstrap:docker
+From:centos:centos7.4.1708
+
+%post
+    yum -y groupinstall "Development Tools" "X Window System" "GNOME Desktop" "Graphical Administration Tools"
+    yum -y install epel-release \
+                   git \
+                   wget \
+                   cairo-devel \
+
+    yum -y install R-3.5.1-1.el7.x86_64
+
+    #python, Jupyter
+    yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+    yum -y install python36u
+    yum -y install python36u-pip \
+                   python36u-devel
+    python3 -m pip install jupyter
+
+    ##install X11 for Jupyter from:
+    #https://www.itzgeek.com/how-tos/linux/centos-how-tos/install-gnome-gui-on-centos-7-rhel-7.html
+    ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/default.target
+
+    ##locales
+    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C' >> $SINGULARITY_ENVIRONMENT
+
+    #BiocManager to allow further install of packages
+    mkdir /usr/share/doc/R-3.5.1/html
+    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T)'
+    R --slave -e 'library("BiocManager"); BiocManager::install("IRkernel", repos="https://cloud.r-project.org/", quiet=T)'
+    R --slave -e 'library("BiocManager"); BiocManager::install("Cairo", repos="https://cloud.r-project.org/", quiet=T)'
