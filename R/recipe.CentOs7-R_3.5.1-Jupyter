@@ -2,24 +2,29 @@ Bootstrap:docker
 From:centos:centos7.4.1708
 
 %post
-    yum -y groups mark install "Development Tools" "X Window System" "GNOME Desktop" "Graphical Administration Tools" "Server with GUI"
-    yum -y groups mark convert "Development Tools" "X Window System" "GNOME Desktop" "Graphical Administration Tools" "Server with GUI"
-    yum -y groupinstall "Development Tools" "X Window System" "GNOME Desktop" "Graphical Administration Tools" "Server with GUI"
-
     yum -y install epel-release \
                    git \
                    wget \
                    cairo-devel \
                    firefox.x86_64 \
+                   libX11 \
+                   libXt \
                    libXt-devel \
                    libX11-devel \
-                   xorg-x11*
+                   xorg-x11* \
+                   xauth \
+                   dbus-x11 \
+                   freetype \
+                   mesa-libGL
 
     yum -y install R-3.5.1-1.el7.x86_64
+    mkdir -p /usr/local/lib64/R/bin
+    ln -s /usr/bin/R /usr/local/lib64/R/bin/R
 
     ##workaround X11/png clash in Jupyter Notebook
     ##see: https://github.com/IRkernel/IRkernel/issues/388
-    echo "options(bitmapType='cairo')" \>\> /usr/lib64/R/Rprofile.site
+    echo "options(bitmapType='cairo')" >> /usr/lib64/R/Rprofile.site
+    echo "options(device=png)" >> /usr/lib64/R/Rprofile.site
 
     ##set library, Rprofile where IRkernel installed
     echo 'export R_LIBS=/usr/lib64/R/library R_ENVIRON=/usr/lib64/R/Rprofile.site' >> $SINGULARITY_ENVIRONMENT
