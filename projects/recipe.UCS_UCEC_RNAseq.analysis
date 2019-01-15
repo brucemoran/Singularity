@@ -2,6 +2,9 @@ Bootstrap:shub
 From:brucemoran/Singularity:centos7-r_3.5.1-jupyter
 
 %post
+    ##may need Curl
+    yum -y install libcurl libcurl-devel mysql mysql-devel
+
     #need R package installs
     #BiocManager to install packages
     R --slave -e 'library("BiocManager"); BiocManager::install(c("httr", "DESeq2", "apeglm", "ggplot2", "tidyverse", "plyr", "dplyr", "biomaRt", "sleuth", "CellMix", "reshape2", "roots", "viper", "mixtools", "bcellViper", "aracne.networks", "Biobase", "rgexf", "fgsea", "gtools", "tximport"), dependencies=TRUE, update=TRUE, ask=FALSE)'
