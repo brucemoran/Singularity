@@ -7,10 +7,14 @@ From:centos:centos7.4.1708
                    wget \
                    cairo-devel \
                    firefox.x86_64 \
-                   libX11 \
-                   libXt \
                    libXt-devel \
                    libX11-devel \
+                   libcurl-devel \
+                   mysql-devel \
+                   ImageMagick-c++-devel \
+                   libxml2-devel \
+                   netcdf-devel \
+                   udunits2-devel \
                    xorg-x11* \
                    xauth \
                    dbus-x11 \
@@ -53,8 +57,4 @@ From:centos:centos7.4.1708
     R --slave -e 'library("BiocManager"); BiocManager::install("Cairo", dependencies=TRUE, update=TRUE, ask=FALSE)'
 
     chmod -R 777 /usr/lib64/R/library
-<<<<<<< HEAD
     chmod -R 777 /usr/share/doc/R-3.5.1/*
-    
-=======
->>>>>>> 949c6873ca59a1a639490de0d8355bbe49785eec
