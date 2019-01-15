@@ -53,5 +53,8 @@ From:centos:centos7.4.1708
     R --slave -e 'library("BiocManager"); BiocManager::install("Cairo", dependencies=TRUE, update=TRUE, ask=FALSE)'
 
     chmod -R 777 /usr/lib64/R/library
+<<<<<<< HEAD
     chmod -R 777 /usr/share/doc/R-3.5.1/*
     
+=======
+>>>>>>> 949c6873ca59a1a639490de0d8355bbe49785eec
