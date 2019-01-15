@@ -51,3 +51,7 @@ From:centos:centos7.4.1708
     R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T)'
     R --slave -e 'library("BiocManager"); BiocManager::install("IRkernel", dependencies=TRUE, update=TRUE, ask=FALSE); IRkernel::installspec(user = FALSE)'
     R --slave -e 'library("BiocManager"); BiocManager::install("Cairo", dependencies=TRUE, update=TRUE, ask=FALSE)'
+
+    chmod -R 777 /usr/lib64/R/library
+    chmod -R 777 /usr/share/doc/R-3.5.1/*
+    
