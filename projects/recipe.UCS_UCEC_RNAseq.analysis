@@ -2,6 +2,10 @@ Bootstrap:shub
 From:brucemoran/Singularity:centos7-r_3.5.1-jupyter
 
 %post
-    #need R package installs
     #BiocManager to install packages
-    R --slave -e 'library("BiocManager"); BiocManager::install(c("BiocInstaller", "httr", "limma", "CAMERA", "DEFormats", "apeglm", "ggplot2", "tidyverse", "plyr", "dplyr", "biomaRt", "sleuth", "reshape2", "roots", "viper", "mixtools", "bcellViper", "aracne.networks", "Biobase", "rgexf", "fgsea", "gtools", "tximport"), dependencies=TRUE, update=TRUE, ask=FALSE); library("BiocInstaller"); biocLite("CellMix", siteRepos = "http://web.cbio.uct.ac.za/~renaud/CRAN")'
+    R --slave -e 'library("BiocManager"); BiocManager::install("CellMix", site_repository="http://web.cbio.uct.ac.za/~renaud/CRAN", dependencies=TRUE, update=TRUE, ask=FALSE); BiocManager::install(c("httr", "limma", "CAMERA", "DEFormats", "apeglm", "ggplot2", "tidyverse", "plyr", "dplyr", "biomaRt", "sleuth", "reshape2", "roots", "viper", "mixtools", "bcellViper", "aracne.networks", "Biobase", "rgexf", "fgsea", "gtools", "tximport", "pkgmaker", "NMF", "csSAM", "registry", "GSEABase", "limSolve", "quadprog", "corpcor", "beeswarm", "BiocInstaller", "bibtex"), dependencies=TRUE, update=TRUE, ask=FALSE)'
+
+    #CellMix is awkward
+    cd /usr/lib64/R/library
+    wget http://web.cbio.uct.ac.za/~renaud/CRAN/src/contrib/CellMix_1.6.2.tar.gz
+    R CMD INSTALL CellMix_1.6.2.tar.gz
