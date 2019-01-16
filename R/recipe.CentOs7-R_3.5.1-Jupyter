@@ -2,8 +2,10 @@ Bootstrap:docker
 From:centos:centos7.4.1708
 
 %post
-    yum -y install epel-release \
-                   git \
+
+    yum -y install epel-release
+    yum repolist
+    yum -y install git \
                    wget \
                    cairo-devel \
                    firefox.x86_64 \
@@ -53,7 +55,7 @@ From:centos:centos7.4.1708
     #BiocManager to allow further install of packages
     mkdir /usr/share/doc/R-3.5.1/html
     R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T)'
-    R --slave -e 'library("BiocManager"); BiocManager::install("IRkernel", dependencies=TRUE, update=TRUE, ask=FALSE); IRkernel::installspec(user = FALSE)'
+    R --slave -e 'library("BiocManager"); BiocManager::install(); BiocManager::install("IRkernel", dependencies=TRUE, update=TRUE, ask=FALSE); IRkernel::installspec(user = FALSE)'
     R --slave -e 'library("BiocManager"); BiocManager::install("Cairo", dependencies=TRUE, update=TRUE, ask=FALSE)'
 
     chmod -R 777 /usr/lib64/R/library

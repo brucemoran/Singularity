@@ -4,4 +4,4 @@ From:brucemoran/Singularity:centos7-r_3.5.1-jupyter
 %post
     #need R package installs
     #BiocManager to install packages
-    R --slave -e 'library("BiocManager"); BiocManager::install(c("httr", "limma", "CAMERA", "DEFormats", "apeglm", "ggplot2", "tidyverse", "plyr", "dplyr", "biomaRt", "sleuth", "CellMix", "reshape2", "roots", "viper", "mixtools", "bcellViper", "aracne.networks", "Biobase", "rgexf", "fgsea", "gtools", "tximport"), dependencies=TRUE, update=TRUE, ask=FALSE)'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("BiocInstaller", "httr", "limma", "CAMERA", "DEFormats", "apeglm", "ggplot2", "tidyverse", "plyr", "dplyr", "biomaRt", "sleuth", "reshape2", "roots", "viper", "mixtools", "bcellViper", "aracne.networks", "Biobase", "rgexf", "fgsea", "gtools", "tximport"), dependencies=TRUE, update=TRUE, ask=FALSE); library("BiocInstaller"); biocLite("CellMix", siteRepos = "http://web.cbio.uct.ac.za/~renaud/CRAN")'
