@@ -15,4 +15,4 @@ From:centos:centos7.4.1708
 
     #BiocManager to allow further install of packages
     mkdir /usr/share/doc/R-3.5.1/html
-    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T)'
+    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T); library("BiocManager"); BiocManager::install("tidyverse")'
