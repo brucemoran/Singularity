@@ -1,0 +1,99 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1
+
+%help
+    Container for VEP_92.1 rattus_norvegicus_merged cache
+
+%post
+    #environment variables defined in post section using
+    ##SINGULARITY_ENVIRONMENT variable
+
+    ##thanks to ##https://github.com/CHRUdeLille/vep_containers/blob/master/92/Singularity.92
+
+    #essential utilities
+    yum install -y git \
+                   autoconf \
+                   automake \
+                   make \
+                   wget \
+                   unzip \
+                   zlib-devel \
+                   libzip-devel \
+                   bzip2-devel \
+                   bzip2-libs \
+                   xz-devel \
+                   ncurses-devel \
+                   curl-devel \
+                   openssl-devel \
+                   which \
+                   emacs \
+                   gcc
+
+    ln -fs /usr/bin/* /usr/local/bin/
+
+    #samtools fro HTSlib
+    cd /usr/local/src
+    wget https://github.com/samtools/samtools/releases/download/1.8/samtools-1.8.tar.bz2
+    tar xf samtools-1.8.tar.bz2
+    rm samtools-1.8.tar.bz2
+    cd samtools-1.8
+    ./configure --prefix=/usr/local/
+    make
+    make install
+
+    #Ensembl VEP
+    ##required installs
+    yum install -y perl-CPAN \
+                   perl-DBI \
+                   perl-IO-Socket-SSL \
+                   perl-Archive-Any \
+                   perl-YAML \
+                   perl-CPAN-Meta \
+                   perl-Digest-MD5 \
+                   perl-App-cpanminus \
+                   perl-local-lib
+
+    cpanm --force --local-lib "/usr/local" ExtUtils::MakeMaker Module::Build
+
+    cd /usr/local/src
+    git clone -b release/92 https://github.com/Ensembl/ensembl.git
+    git clone -b release/92 https://github.com/Ensembl/ensembl-vep.git
+    ensembl-vep/travisci/get_dependencies.sh
+
+    PERL5LIB=$PERL5LIB:/usr/local/lib/perl5:/usr/local/src/bioperl-live-release-1-6-924
+    export KENT_SRC=/usr/local/src/kent-335_base/src
+    export HTSLIB_DIR=/usr/local/src/htslib
+    export MACHTYPE=x86_64
+    export CFLAGS="-fPIC"
+    export DEPS=/usr/local/src
+    ensembl-vep/travisci/build_c.sh
+    cd $HTSLIB_DIR
+    make install
+
+    cd /usr/local/src
+    git clone https://github.com/bioperl/bioperl-ext.git
+    cd bioperl-ext
+    git reset --hard 1b59725
+    cd Bio/Ext/Align/
+    perl -pi -e"s|(cd libs.+)CFLAGS=\\\'|\$1CFLAGS=\\\'-fPIC |" Makefile.PL
+    perl Makefile.PL
+    make
+    make install
+    cd /usr/local/src/ensembl-vep
+    chmod u+x *.pl
+    PERL5LIB=$PERL5LIB:/usr/local/src/bioperl-live-release-1-6-924:/usr/local/src/ensembl-vep
+    echo 'export PERL5LIB' >> $SINGULARITY_ENVIRONMENT
+
+    ##install cache
+    perl ./INSTALL.pl --AUTO ac \
+                      --CACHEDIR "/usr/local/src/ensembl-vep/cache" \
+                      --SPECIES "rattus_norvegicus_merged" \
+                      --NO_UPDATE \
+                      --NO_HTSLIB \
+                      --PLUGINS "dbNSFP,RefSeqHGVS"
+
+    ##for no install of cache
+    ##perl ./INSTALL.pl --AUTO a --NO_UPDATE --NO_HTSLIB
+
+    ln -s /usr/local/src/ensembl-vep/vep /usr/local/bin/
+    cd /usr/local/src

@@ -26,31 +26,6 @@ From:centos:centos7.4.1708
   echo 'export CC=gcc-8 CXX=g++-8' >> $SINGULARITY_ENVIRONMENT
   export CC=gcc-8 CXX=g++-8
 
-  apt-get install -y --no-install-recommends apt-utils
-  add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  apt-get -y install \
-              gcc-8 g++-8 \
-              build-essential \
-              make \
-              wget \
-              autotools-dev \
-              libicu-dev \
-              git \
-              curl \
-              libcurl4-openssl-dev \
-              pkg-config \
-              autoconf \
-              libbz2-dev \
-              liblzma-dev \
-              zlib1g-dev \
-              openssl \
-              libssl-dev \
-              libcrypto++-dev \
-              python36u python36u-libs python36u-devel python36u-pip
-  CC=gcc-8
-  CXX=g++-8
-  echo 'export CC=gcc-8 CXX=g++-8' >> $SINGULARITY_ENVIRONMENT
-
   cd /usr/local/src
   wget https://ftp.gnu.org/gnu/gcc/gcc-8.2.0/gcc-8.2.0.tar.gz
   tar xf gcc-8.2.0.tar.gz
@@ -58,8 +33,12 @@ From:centos:centos7.4.1708
   cd gcc-8.2.0
 
   # Install CMake
-  if [[ ! -d /usr/local/src ]];then mkdir -p /usr/local/src; fi
-  if [[ ! -d /usr/local/bin ]];then mkdir -p /usr/local/bin; fi
+  if [[ ! -d /usr/local/src ]];then
+    mkdir -p /usr/local/src;
+  fi
+  if [[ ! -d /usr/local/bin ]];then
+    mkdir -p /usr/local/bin;
+  fi
 
   cd /usr/local/src
   wget https://cmake.org/files/v3.11/cmake-3.11.4.tar.gz
