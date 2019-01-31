@@ -2,6 +2,21 @@ Bootstrap:shub
 From:brucemoran/Singularity:centos7-r_3.5.1-jupyter
 
 %post
+
+    ##install ARACNe-AP
+    if [[ ! -d /usr/local/src ]];then
+      mkdir -p /usr/local/{bin,src}
+    fi
+    cd /usr/local/src
+
+    yum install -y java-1.8.0-openjdk ant
+
+    git clone https://github.com/califano-lab/ARACNe-AP
+    cd ARACNe-AP
+    ant main
+
+    echo -e "#! /bin/bash\njavamem=""\nif [[ \$1 =~ "-Xmx" ]];then javamem=\$1; shift 1; fi\nexec java \$javamem -jar /usr/local/src/ARACNe-AP/dist/aracne.jar "\$@"" > /usr/local/bin/ARACNe-AP
+
     #BiocManager to install packages
     R --slave -e 'library("BiocManager"); BiocManager::install("CellMix", site_repository="http://web.cbio.uct.ac.za/~renaud/CRAN", dependencies=TRUE, update=TRUE, ask=FALSE); BiocManager::install(c("httr", "limma", "CAMERA", "DEFormats", "apeglm", "ggplot2", "tidyverse", "plyr", "dplyr", "biomaRt", "sleuth", "reshape2", "roots", "viper", "mixtools", "bcellViper", "aracne.networks", "Biobase", "rgexf", "fgsea", "gtools", "tximport"), dependencies=TRUE, update=TRUE, ask=FALSE)'
 
