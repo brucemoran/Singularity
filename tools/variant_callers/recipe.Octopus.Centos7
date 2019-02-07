@@ -1,0 +1,117 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1
+
+%post
+
+    yum -y  install \
+            which \
+            yum-utils \
+            gcc \
+            gcc-c++ \
+            make \
+            wget \
+            git \
+            autoconf \
+            openssl \
+            bzip2.x86_64 \
+            bzip2-devel.x86_64 \
+            xz-devel.x86_64 \
+            zlib-devel.x86_64 \
+            libcurl-devel.x86_64 \
+            python36
+    ln -sf /usr/bin/python3.6 /usr/local/python
+    ln -sf /usr/python3.6 /usr/local/python3
+    ln -sf /usr/python3.6 /usr/local/python36
+
+    ##gcc-7
+    cd /usr/local
+    mkdir gcc-7.2.0-build
+    wget ftp://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-7.2.0/gcc-7.2.0.tar.gz
+    tar -xvzf gcc-7.2.0.tar.gz
+    rm gcc-7.2.0.tar.gz
+    cd gcc-7.2.0
+    ./contrib/download_prerequisites
+    cd ../gcc-7.2.0-build
+    ../gcc-7.2.0/configure \
+      --enable-bootstrap \
+      --enable-languages=c,c++,fortran,lto \
+      --with-bugurl=http://bugzilla.redhat.com/bugzilla \
+      --enable-shared \
+      --enable-threads=posix \
+      --enable-checking=release \
+      --disable-multilib \
+      --with-system-zlib \
+      --enable-__cxa_atexit \
+      --disable-libunwind-exceptions \
+      --enable-gnu-unique-object \
+      --enable-linker-build-id \
+      --with-gcc-major-version-only \
+      --enable-plugin \
+      --with-linker-hash-style=gnu \
+      --enable-initfini-array \
+      --enable-libmpx \
+      --enable-gnu-indirect-function \
+      --with-tune=generic \
+      --build=x86_64-redhat-linux
+    make
+    make install
+
+    ##set environment variables
+    export LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64 CC=/usr/local/bin/gcc CXX=/usr/local/bin/g++
+
+    echo 'export CC=/usr/local/bin/gcc CXX=/usr/local/bin/g++ LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64' >> $SINGULARITY_ENVIRONMENT
+
+    ln -sf /usr/local/bin/gcc /usr/bin/gcc
+    ln -sf /usr/local/bin/g++ /usr/bin/g++
+    gcc --version
+    g++ --version
+
+    ##Install CMake
+    cd /usr/local
+    wget https://github.com/Kitware/CMake/releases/download/v3.13.3/cmake-3.13.3.tar.gz
+    tar xzvf cmake-3.13.3.tar.gz
+    rm cmake-3.13.3.tar.gz
+    cd cmake-3.13.3
+    ./bootstrap --prefix=/usr/local
+    make
+    make install
+
+    ##Install Boost
+    cd /usr/local
+    wget https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2
+    tar --bzip2 -xf boost_1_67_0.tar.bz2
+    rm boost_1_67_0.tar.bz2
+    cd boost_1_67_0
+    ./bootstrap.sh --prefix=/usr/local \
+                   --without-libraries=python,mpi
+    ./b2 cxxflags="-std=c++11"
+    ./b2 install
+
+    # Install htslib
+    cd /usr/local
+    git clone -b master https://github.com/samtools/htslib.git
+    cd htslib
+    autoheader
+    autoconf
+    ./configure
+    make
+    make install
+
+    c++ --version
+    gcc --version
+    cmake --version
+    python --version
+
+    # Install Octopus
+    cd /usr/local
+    git clone -b develop https://github.com/luntergroup/octopus.git
+    cd octopus/build
+    cmake .. -D CMAKE_C_COMPILER=$CC -D CMAKE_CXX_COMPILER=$CXX
+    make install
+    make clean
+
+    ln -s /usr/local/octopus/bin/octopus /usr/bin/
+    rm -rf /usr/local/gcc-7.2.0-build
+    rm -rf /usr/local/gcc-7.2.0
+    rm -rf /usr/local/cmake-3.13.3
+    rm -rf /usr/local/boost_1_67_0
