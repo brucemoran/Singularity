@@ -1,0 +1,24 @@
+Bootstrap:shub
+From:brucemoran/Singularity:samtools.centos7
+
+%help
+    Container for lancet caller v1.0.7 Git commit 714e1694097735490eb9fe5f5670d44292990b33
+
+%post
+
+    yum install -y cmake3 \
+                   make \
+                   zlib \
+                   gcc \
+                   g++
+
+    ln -s /usr/bin/cmake3 /usr/local/bin/cmake
+
+    export LIBRARY_PATH=/usr/local/lancet/bamtools-2.5.1/lib:${LIBRARY_PATH}
+
+    cd /usr/local
+    git clone https://github.com/nygenome/lancet
+    cd lancet
+    git reset --hard 714e1694097735490eb9fe5f5670d44292990b33
+    make
+    ln -s /usr/local/lancet/lancet /usr/bin/lancet

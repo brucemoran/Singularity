@@ -1,0 +1,13 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1-jupyter
+
+%help
+    Container for reading VCF into GRanges object in Jupyter notebook
+
+%post
+
+    ##set R environmental variables
+    echo 'export R_LIBS=/usr/lib64/R/library' >> $SINGULARITY_ENVIRONMENT
+
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("bio3d", "GenVisR", "plyranges", "data.table", "RCurl", "XML", "myvariant", "biomaRt", "ensemblVEP", "org.Hs.eg.db", "customProDB", "EnsDb.Hsapiens.v75", "ensembldb", "GenomicRanges",  "VariantAnnotation"), dependencies=TRUE, update=TRUE, ask=FALSE)'

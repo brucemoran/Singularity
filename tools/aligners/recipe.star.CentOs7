@@ -1,0 +1,17 @@
+Bootstrap:shub
+From:brucemoran/Singularity:samtools.centos7
+
+%help
+    Container for star aligner v2.7.0b Git commit 66f06aa1984f4a56a39a47a3a4184b99018d75da
+
+%post
+
+    #star
+    cd /usr/local
+    wget https://github.com/alexdobin/STAR/archive/2.7.0b.tar.gz
+    tar -xf 2.7.0b.tar.gz
+    rm 2.7.0b.tar.gz
+    cd STAR-2.7.0b/source
+    make STAR
+
+    ln -sf /usr/local/STAR-2.7.0b/source/STAR /usr/bin/STAR

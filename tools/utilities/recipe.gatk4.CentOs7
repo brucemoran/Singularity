@@ -1,0 +1,18 @@
+Bootstrap:shub
+From:brucemoran/Singularity:picard-tools.centos7
+
+%help
+    Container for gatk v4.1.0 Git commit 335fac0133f782b1bde295a2c56e0e2dca8e3e58
+
+%post
+
+    export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre
+    echo 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre' >> $SINGULARITY_ENVIRONMENT
+
+    #gatk4
+    cd /usr/local
+    wget https://github.com/broadinstitute/gatk/archive/4.1.0.0.zip
+    unzip 4.1.0.0.zip
+    rm 4.1.0.0.zip
+
+    ln -s /usr/local/gatk-4.1.0.0/gatk /usr/local/bin/gatk

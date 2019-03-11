@@ -1,0 +1,18 @@
+Bootstrap:shub
+From:brucemoran/Singularity:samtools.centos7
+
+%help
+    Container for bwa aligner v0.7.17 w/samtools v1.9
+
+%post
+
+    ##bwa
+    ##Git commit 9f26bfcc7780753129b60717ecab0ebba6f04b7c
+    cd /usr/local
+    wget https://github.com/lh3/bwa/archive/v0.7.17.tar.gz
+    tar -xf v0.7.17.tar.gz
+    rm v0.7.17.tar.gz
+    cd bwa-0.7.17/
+    make
+
+    ln -s /usr/local/bwa-0.7.17/bwa /usr/bin/bwa

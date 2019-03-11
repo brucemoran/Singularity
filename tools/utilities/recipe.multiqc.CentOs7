@@ -1,0 +1,20 @@
+Bootstrap:shub
+From:brucemoran/Singularity:samtools.centos7
+
+%help
+    Container for MultiQC v1.7 Git commit cab5a612734efd84cdb3f775e52c36114317b140
+
+%post
+    yum install -y python36 \
+                   python36-pip
+
+    ln -sf /usr/bin/python3.6 /usr/bin/python
+    ln -sf /usr/bin/pip3.6 /usr/bin/pip
+
+
+    #MultiQC
+    export LC_ALL=en_US.utf-8
+    export LANG=en_US.utf-8
+    echo 'export LC_ALL=en_US.utf-8 LANG=en_US.utf-8' > $SINGULARITY_ENVIRONMENT
+
+    pip install multiqc

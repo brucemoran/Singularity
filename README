@@ -1,2 +1,16 @@
 ##Singularity Repository
 Holds Singularity recipes
+
+##Required
+BBDuk
+fastQC
+bwa
+picard-tools
+gatk4
+R - facets, qDNAseq, sequenza
+msisensor
+manta
+strelka
+lancet
+VEP
+multiQC

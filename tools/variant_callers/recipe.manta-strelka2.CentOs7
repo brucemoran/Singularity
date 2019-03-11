@@ -1,0 +1,44 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7
+
+%help
+    Container for manta, stelka2 callers v1.5.0,  Git commits a922b746a0fe603ae5ad3a284b00b8e735b72709, 1c8f1be330dc6f58568c82468a9da1c5f32fb54a
+
+%post
+
+    yum install -y which \
+                   python36 \
+                   make \
+                   cmake3 \
+                   zlib-devel \
+                   bzip2 \
+                   gcc-c++ \
+                   gcc \
+                   libstdc++-static
+
+    ln -sf /usr/bin/python3.6 /usr/bin/python
+    ln -sf /usr/bin/cmake3 /usr/bin/cmake
+
+    export CC=/usr/bin/gcc
+    export CXX=/usr/bin/g++
+
+    cd /usr/local
+    git clone https://github.com/Illumina/manta
+    cd manta
+    git reset --hard a922b746a0fe603ae5ad3a284b00b8e735b72709
+    mkdir build && cd build
+    ../configure --prefix=/usr/local \
+                 --with-cmake=/usr/bin/cmake
+    make install
+
+    export BOOST_ROOT=/usr/local/manta/build/bootstrap/boost/include
+    echo 'export BOOST_ROOT=/usr/local/manta/build/bootstrap/boost/include' >> $SINGULARITY_ENVIRONMENT
+
+    cd /usr/local
+    git clone https://github.com/Illumina/strelka
+    cd strelka
+    git reset --hard 1c8f1be330dc6f58568c82468a9da1c5f32fb54a
+    mkdir build && cd build
+    ../configure --prefix=/usr/local \
+                 --with-cmake=/usr/bin/cmake
+    make install

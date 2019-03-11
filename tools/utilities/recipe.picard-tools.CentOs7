@@ -1,0 +1,18 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-java8
+
+%help
+    Container for picard-tools v2.18.26 Git commit 42c8ee081acd32e65f8bf57fc99d6b7a96e8c015
+
+%post
+
+    #picard-tools
+    cd /usr/local
+    mkdir picard-tools && cd picard-tools
+    wget https://github.com/broadinstitute/picard/releases/download/2.18.26/picard.jar
+
+    ##create executable
+    ##NB allows Xmx for resource allocation only
+    chmod a+x /usr/local/picard-tools/picard.jar
+    echo -e "#! /bin/bash\njavamem=""\nif [[ \$1 =~ "-Xmx" ]];then javamem=\$1; shift 1; fi\nexec java \$javamem -jar /usr/local/picard-tools/picard.jar "\$@"" > /usr/local/bin/picard-tools
+    chmod a+x /usr/local/bin/picard-tools

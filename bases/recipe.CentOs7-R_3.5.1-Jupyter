@@ -1,31 +1,17 @@
-Bootstrap:docker
-From:centos:centos7.4.1708
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1
 
 %post
 
-    yum -y install epel-release
-    yum repolist
-    yum -y install git \
-                   wget \
-                   cairo-devel \
-                   firefox.x86_64 \
+    yum -y install firefox.x86_64 \
                    libXt-devel \
                    libX11-devel \
-                   libcurl-devel \
-                   mysql-devel \
                    ImageMagick-c++-devel \
-                   libxml2-devel \
-                   netcdf-devel \
-                   udunits2-devel \
                    xorg-x11* \
                    xauth \
                    dbus-x11 \
                    freetype \
                    mesa-libGL
-
-    yum -y install R-3.5.1-1.el7.x86_64
-    mkdir -p /usr/local/lib64/R/bin
-    ln -s /usr/bin/R /usr/local/lib64/R/bin/R
 
     ##workaround X11/png clash in Jupyter Notebook
     ##see: https://github.com/IRkernel/IRkernel/issues/388
@@ -37,9 +23,9 @@ From:centos:centos7.4.1708
 
     #python, Jupyter
     yum -y install https://centos7.iuscommunity.org/ius-release.rpm
-    yum -y install python36u
-    yum -y install python36u-pip \
-                   python36u-devel
+    yum -y install python36
+    yum -y install python36-pip \
+                   python36-devel
     python3.6 -m pip install jupyter
 
     ##error on mkdir permission for /run/users/1001 where Jupyter likes to run
@@ -49,12 +35,18 @@ From:centos:centos7.4.1708
     #https://www.itzgeek.com/how-tos/linux/centos-how-tos/install-gnome-gui-on-centos-7-rhel-7.html
     ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/default.target
 
-    ##locales
-    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C' >> $SINGULARITY_ENVIRONMENT
+    ##install hide_code feature in Jupyter for HTML export
+    pip3.6 install hide_code
+    jupyter nbextension install --py hide_code
+    jupyter nbextension enable --py hide_code 
+    jupyter serverextension enable --py hide_code
+    jupyter serverextension enable --py hide_code
+
+    ##jupytext
+    pip3.6 install pyyaml mock testfixtures
+    pip3.6 install jupytext --upgrade
 
     #BiocManager to allow further install of packages
-    mkdir /usr/share/doc/R-3.5.1/html
-    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T)'
     R --slave -e 'library("BiocManager"); BiocManager::install(); BiocManager::install("IRkernel", dependencies=TRUE, update=TRUE, ask=FALSE); IRkernel::installspec(user = FALSE)'
     R --slave -e 'library("BiocManager"); BiocManager::install(c("Cairo", "tidyverse"), dependencies=TRUE, update=TRUE, ask=FALSE)'
 

@@ -1,0 +1,16 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-java8
+
+%help
+    Container for fastqc from babraham inst. download no versioning=(
+
+%post
+
+    #fastqc
+    cd /usr/local
+    wget http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.8.zip
+    unzip fastqc_v0.11.8.zip
+    rm fastqc_v0.11.8.zip
+    chmod 777 ./FastQC/fastqc
+
+    ln -s /usr/local/FastQC/fastqc /usr/local/bin/

@@ -19,9 +19,8 @@ From:brucemoran/Singularity:centos7-r_3.5.1
             zlib-devel.x86_64 \
             libcurl-devel.x86_64 \
             python36
+
     ln -sf /usr/bin/python3.6 /usr/local/python
-    ln -sf /usr/python3.6 /usr/local/python3
-    ln -sf /usr/python3.6 /usr/local/python36
 
     ##gcc-7
     cd /usr/local

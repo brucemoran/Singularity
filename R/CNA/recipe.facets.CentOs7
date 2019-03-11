@@ -1,0 +1,46 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1
+
+%post
+
+    yum install -y autoconf \
+                   automake \
+                   make \
+                   gcc \
+                   g++ \
+                   perl-Data-Dumper \
+                   zlib-devel \
+                   bzip2 \
+                   bzip2-devel \
+                   xz-devel \
+                   curl-devel \
+                   openssl-devel \
+                   ncurses-devel
+
+    ##HTSlib
+    cd /usr/local
+    cd /usr/local
+    git clone https://github.com/samtools/htslib
+    cd htslib
+    git reset --hard 1832d3a1b75133e55fb6abffc3f50f8a6ed5ceae
+    autoheader
+    autoconf -Wno-syntax
+    ./configure
+    make
+    make install
+
+    ##set R environmental variables
+    echo 'export R_LIBS=/usr/lib64/R/library LD_LIBRARY_PATH=/usr/local/lib' >> $SINGULARITY_ENVIRONMENT
+
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install("devtools", dependencies=TRUE, update=TRUE, ask=FALSE)'
+    R --slave -e 'devtools::install_github("mskcc/facets", build_vignettes = TRUE); devtools::install_github("mskcc/pctGCdata")'
+
+    ##compile snp-pileup
+    cd /usr/lib64/R/library/facets/extcode
+    g++ -std=c++11 snp-pileup.cpp -lhts -o snp-pileup
+
+    ##permissions
+    chmod a+x /usr/local/lib/libhts.so.1.9 /usr/local/lib/libhts.a
+
+    ln -s /usr/lib64/R/library/facets/extcode/snp-pileup /usr/local/bin/snp-pileup

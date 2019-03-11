@@ -1,0 +1,18 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-java8
+
+%help
+    Container for bbduk v38.36 Sourceforge sha1 e63f5dd503396c88c5959a381876aa8d947b1ff2
+
+%post
+
+    #bbmap
+    cd /usr/local
+    wget https://downloads.sourceforge.net/project/bbmap/BBMap_38.36.tar.gz
+    tar -xf BBMap_38.36.tar.gz
+    rm BBMap_38.36.tar.gz
+    cd bbmap
+
+    echo 'export BB_REFS=/usr/local/bbmap/resources/adapters.fa' >> $SINGULARITY_ENVIRONMENT
+
+    ln -s /usr/local/bbmap/*sh /usr/local/bin/

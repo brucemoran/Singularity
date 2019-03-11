@@ -1,0 +1,18 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7
+
+%help
+    Container for kallisto pseudoaligner v0.45.0 Git commit 0c950a3579b2691eada652f6a106d14473e4e467
+
+%post
+
+    #install cmake, zlib, HDF5 libraries
+    yum install -y cmake \
+                   hdf5 \
+                   zlib
+
+    cd /usr/local
+    wget https://github.com/pachterlab/kallisto/releases/download/v0.45.0/kallisto_linux-v0.45.0.tar.gz
+    tar -xf kallisto_linux-v0.45.0.tar.gz
+    rm kallisto_linux-v0.45.0.tar.gz
+    ln -sf /usr/local/kallisto_linux-v0.45.0/kallisto /usr/bin/kallisto
