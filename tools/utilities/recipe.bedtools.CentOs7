@@ -1,0 +1,16 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7
+
+%help
+
+    Container for BEDtools2 from Quinlan group, version 2.27.1
+
+%post
+
+    ##bedtools2
+    cd /usr/local
+    git clone https://github.com/arq5x/bedtools2
+    cd bedtools2
+    git reset --hard 1de417b904acd872e1fd6d1e5e680ddab1c11b79
+    make
+    ln -sf /usr/local/bedtools2/bin/* /usr/bin/

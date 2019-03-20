@@ -18,3 +18,9 @@ From:brucemoran/Singularity:samtools.centos7
     echo 'export LC_ALL=en_US.utf-8 LANG=en_US.utf-8' > $SINGULARITY_ENVIRONMENT
 
     pip install multiqc
+
+    ##get YAML, JPG for personalised output
+    cd /usr/local/
+    wget https://raw.githubusercontent.com/brucemoran/useful/master/multiqc_config_BMB.yaml
+    wget https://raw.githubusercontent.com/brucemoran/useful/master/happy_computer_guy.jpg
+    

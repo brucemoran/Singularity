@@ -6,6 +6,8 @@ From:brucemoran/Singularity:centos7-java8
 
 %post
 
+    export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.201.b09-2.el7_6.x86_64
+
     #picard-tools
     cd /usr/local
     mkdir picard-tools && cd picard-tools

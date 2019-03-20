@@ -1,0 +1,5 @@
+Bootstrap:docker
+From:broadinstitute/gatk
+
+%help
+    Container for gatk v4.1.0 from Docker
