@@ -1,5 +1,5 @@
 Bootstrap:shub
-From:brucemoran/Singularity:centos7-r_3.5.1
+From:brucemoran/Singularity:centos7-r_3.5.1_ens
 
 %post
 
@@ -19,7 +19,6 @@ From:brucemoran/Singularity:centos7-r_3.5.1
 
     ##HTSlib
     cd /usr/local
-    cd /usr/local
     git clone https://github.com/samtools/htslib
     cd htslib
     git reset --hard 1832d3a1b75133e55fb6abffc3f50f8a6ed5ceae
@@ -29,12 +28,24 @@ From:brucemoran/Singularity:centos7-r_3.5.1
     make
     make install
 
-    ##set R environmental variables
-    echo 'export R_LIBS=/usr/lib64/R/library LD_LIBRARY_PATH=/usr/local/lib' >> $SINGULARITY_ENVIRONMENT
+    ##samtools
+    cd /usr/local
+    git clone https://github.com/samtools/samtools
+    cd samtools
+    git reset --hard b24d8121509cdfc745d73dd3b90da5571a6d4db9
+    autoheader
+    autoconf -Wno-syntax
+    ./configure
+    make
+    make install
+
+    export R_LIBS=/usr/lib64/R/library LD_LIBRARY_PATH=/usr/local/lib
 
     #BiocManager to install packages
     R --slave -e 'library("BiocManager"); BiocManager::install("devtools", dependencies=TRUE, update=TRUE, ask=FALSE)'
-    R --slave -e 'devtools::install_github("mskcc/facets", build_vignettes = TRUE); devtools::install_github("mskcc/pctGCdata")'
+    R --slave -e 'devtools::install_github("mskcc/pctGCdata", build_vignettes = FALSE, dependencies=TRUE)'
+    R --slave -e 'devtools::install_github("mskcc/facets", build_vignettes = FALSE, ref="434b5ce5903dc6b42e3c31fcfdceb9dddc56d82c", dependencies=TRUE)'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("bio3d"), build_vignettes = FALSE, dependencies=TRUE, update=TRUE, ask=FALSE)'
 
     ##compile snp-pileup
     cd /usr/lib64/R/library/facets/extcode
@@ -42,5 +53,7 @@ From:brucemoran/Singularity:centos7-r_3.5.1
 
     ##permissions
     chmod a+x /usr/local/lib/libhts.so.1.9 /usr/local/lib/libhts.a
+
+    echo 'export R_LIBS=/usr/lib64/R/library LD_LIBRARY_PATH=/usr/local/lib' >> $SINGULARITY_ENVIRONMENT
 
     ln -s /usr/lib64/R/library/facets/extcode/snp-pileup /usr/local/bin/snp-pileup

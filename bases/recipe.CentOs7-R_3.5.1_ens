@@ -1,0 +1,16 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1
+
+%help
+
+    Container for R with Ensembl/annotation related packages (large)
+
+%post
+
+    echo 'export R_LIBS=/usr/lib64/R/library' >> $SINGULARITY_ENVIRONMENT
+    export R_LIBS=/usr/lib64/R/library
+
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("biomaRt", "BSgenome.Hsapiens.UCSC.hg19", "EnsDb.Hsapiens.v75", "ensembldb", "ensemblVEP", "GenomicRanges", "org.Hs.eg.db", "plyr", "pheatmap", "RCurl", "VariantAnnotation", "XML"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+
+    chmod -R 777 /usr/lib64/R/library

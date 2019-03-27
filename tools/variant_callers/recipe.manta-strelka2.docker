@@ -1,0 +1,5 @@
+Bootstrap:docker
+From:leukgen/docker-strelka
+
+%help
+    Container for manta, stelka2 callers https://github.com/papaemmelab/docker-strelka

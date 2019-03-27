@@ -1,0 +1,16 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7
+
+%help
+  Container for UCSC liftOver of hg19 to hg38
+
+%post
+
+  cd /usr/local
+  wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/liftOver
+  chmod a+x liftOver
+  ln -s /usr/local/liftOver /usr/local/bin/liftOver
+
+  ##chain files for hg19 to 38; all others must be supplied via exec
+  wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz
+  echo 'export HG19TO38CHAIN=usr/local/hg19ToHg38.over.chain.gz' >> $SINGULARITY_ENVIRONMENT

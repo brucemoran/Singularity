@@ -13,4 +13,5 @@ From:brucemoran/Singularity:centos7
     cd bedtools2
     git reset --hard 1de417b904acd872e1fd6d1e5e680ddab1c11b79
     make
+    make install
     ln -sf /usr/local/bedtools2/bin/* /usr/bin/

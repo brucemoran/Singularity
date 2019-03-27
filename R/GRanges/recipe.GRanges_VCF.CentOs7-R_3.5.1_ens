@@ -1,0 +1,14 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1_ens
+
+%help
+    Container for reading VCF into GRanges object in Jupyter notebook
+
+%post
+
+    ##set R environmental variables
+    echo 'export R_LIBS=/usr/lib64/R/library' >> $SINGULARITY_ENVIRONMENT
+    export R_LIBS=/usr/lib64/R/library
+
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("bio3d", "customProDB", "data.table", "GenVisR", "myvariant"), dependencies=TRUE, update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
