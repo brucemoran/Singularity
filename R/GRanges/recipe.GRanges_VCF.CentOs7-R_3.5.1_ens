@@ -11,4 +11,4 @@ From:brucemoran/Singularity:centos7-r_3.5.1_ens
     export R_LIBS=/usr/lib64/R/library
 
     #BiocManager to install packages
-    R --slave -e 'library("BiocManager"); BiocManager::install(c("bio3d", "customProDB", "data.table", "GenVisR", "myvariant"), dependencies=TRUE, update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("bio3d", "customProDB", "data.table", "GenVisR", "myvariant", "openxlsx"), dependencies=TRUE, update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
