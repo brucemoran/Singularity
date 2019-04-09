@@ -1,0 +1,5 @@
+Bootstrap:docker
+From:sigven/pcgr:0.7.0
+
+%help
+    Container for Personalised Cancer Genome Reporter 0.7.0

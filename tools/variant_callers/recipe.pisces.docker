@@ -1,0 +1,10 @@
+Bootstrap:docker
+From:astewart/pisces
+
+%help
+    Container for pisces variant caller for tumour-only https://github.com/Illumina/Pisces
+
+%post
+
+    ##make an executable
+    alias 'pisces'="dotnet /app/Pisces_5.2.9.122/Pisces.dll"

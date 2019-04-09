@@ -1,0 +1,41 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%help
+    Container for PCGR, created using 8e70c323453be3508265ed3a2142ac1511d6fb93
+
+%environment
+
+    export PATH=$PATH:/usr/local/pcgr/src:/usr/local/pcgr/src/pcgr:/usr/local/pcgr/src/pcgr/lib:/usr/local/cpsr
+    export PERL5LIB=/usr/local/miniconda/envs/pcgr/lib/site_perl/5.26.2:/usr/local/miniconda/envs/pcgr/lib/site_perl/5.26.2/x86_64-linux-thread-multi
+
+%post
+
+    pip install toml
+
+    ##pcgr git
+    cd /usr/local
+    git clone https://github.com/sigven/pcgr
+    cd pcgr
+    git reset --hard 3578e489a77072db627c55269a213c59b4d0c9cb
+
+    ##cpsr git
+    cd /usr/local
+    git clone https://github.com/sigven/cpsr
+    cd cpsr
+    git reset --hard fac9bd4b1f7ee7df85588c7c3c2507fc4ca5c430
+
+    ##build from source
+    cd /usr/local
+    conda create -n pcgr -c conda-forge -c bioconda -c pcgr pcgr
+    y
+
+    ##install BSgenome for GRCh37, 38
+    conda install -n pcgr -c bioconda bioconductor-bsgenome.hsapiens.ucsc.hg19
+    conda install -n pcgr -c bioconda bioconductor-bsgenome.hsapiens.ucsc.hg38
+
+    conda activate pcgr
+
+%runscript
+
+    source activate pcgr
