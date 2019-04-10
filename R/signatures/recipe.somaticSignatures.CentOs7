@@ -1,0 +1,20 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1_ens
+
+%help
+  Container with faToTwoBit to convert fasta to 2bit to remove dependency on BSgenome for SomaticSignatures R package herein
+
+%post
+
+  cd /usr/local
+  wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64.v369/faToTwoBit
+  chmod a+x faToTwoBit
+  ln -s /usr/local/faToTwoBit /usr/local/bin/faToTwoBit
+
+  echo 'export R_LIBS=/usr/lib64/R/library' >> $SINGULARITY_ENVIRONMENT
+  export R_LIBS=/usr/lib64/R/library
+
+  #BiocManager to install packages
+  R --slave -e 'library("BiocManager"); BiocManager::install(c("bedr", "SomaticSignatures", ), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+
+  chmod -R 777 /usr/lib64/R/library
