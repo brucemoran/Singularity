@@ -36,6 +36,9 @@ From:brucemoran/Singularity:centos7-conda
 
     conda activate pcgr
 
-%runscript
+    ##change to bash shell default
+    ln -sf /bin/bash /bin/sh
+
+%startscript
 
     source activate pcgr

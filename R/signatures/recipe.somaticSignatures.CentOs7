@@ -6,6 +6,7 @@ From:brucemoran/Singularity:centos7-r_3.5.1_ens
 
 %post
 
+
   cd /usr/local
   wget http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64.v369/faToTwoBit
   chmod a+x faToTwoBit
@@ -15,6 +16,6 @@ From:brucemoran/Singularity:centos7-r_3.5.1_ens
   export R_LIBS=/usr/lib64/R/library
 
   #BiocManager to install packages
-  R --slave -e 'library("BiocManager"); BiocManager::install(c("bedr", "SomaticSignatures", ), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+  R --slave -e 'library("BiocManager"); BiocManager::install(c("bedr", "SomaticSignatures", "MutationalPatterns"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
 
   chmod -R 777 /usr/lib64/R/library

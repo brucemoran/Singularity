@@ -1,5 +1,5 @@
 Bootstrap:shub
-From:brucemoran/Singularity:centos7
+From:brucemoran/Singularity:samtools.centos7
 
 %help
     Container for msisensor v0.5,  Git commit dac94a8c00851a95fa79f0898e4ff21d4ba40408
