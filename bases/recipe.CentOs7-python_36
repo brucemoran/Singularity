@@ -1,0 +1,10 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7
+
+%post
+
+    #python36
+    yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+    yum -y install python36
+    yum -y install python36-pip \
+                   python36-devel

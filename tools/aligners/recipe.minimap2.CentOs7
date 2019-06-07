@@ -2,7 +2,7 @@ Bootstrap:shub
 From:brucemoran/Singularity:samtools.centos7
 
 %help
-    Container for bwa aligner v0.7.17 w/samtools v1.9
+    Container for minimap2 aligner
 
 %post
 
@@ -10,8 +10,7 @@ From:brucemoran/Singularity:samtools.centos7
     cd /usr/local
     git clone https://github.com/lh3/minimap2
     cd minimap2
-    git reset --hard 6b391e3373fa9410f2bd30a31914c454353fdfe9
+    git reset --hard 7bc87b4175dcf3b6df7d4f6ae9db5f3eadd30302
     make
-    make install
 
     ln -sf /usr/local/minimap2/minimap2 /usr/bin/

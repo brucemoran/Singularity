@@ -1,0 +1,36 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%help
+    Container for PCGR, created using 8e70c323453be3508265ed3a2142ac1511d6fb93
+
+%environment
+
+    export PATH=$PATH:/usr/local/pcgr:/usr/local/pcgr/src:/usr/local/pcgr/src/pcgr:/usr/local/pcgr/src/pcgr/lib:/usr/local/cpsr:/usr/local/miniconda/bin
+    export PERL5LIB=/usr/local/miniconda/envs/pcgr/lib/site_perl/5.26.2:/usr/local/miniconda/envs/pcgr/lib/site_perl/5.26.2/x86_64-linux-thread-multi
+
+%post
+
+    ##source and install required
+    source /etc/profile.d/conda.sh
+    /usr/local/miniconda/bin/pip install toml pandas
+
+    ##pcgr git
+    cd /usr/local
+    git clone https://github.com/sigven/pcgr
+    cd pcgr
+    git reset --hard ac0c8d2badcc64c3ad26d812ed06989815774ace
+
+    ##cpsr git
+    cd /usr/local
+    git clone https://github.com/sigven/cpsr
+    cd cpsr
+    git reset --hard b5644c54aad99d272937b5cc7c65385a185fa6e9
+
+    cd /usr/local
+    conda create -n pcgr -c conda-forge -c bioconda -c pcgr pcgr
+    conda activate pcgr
+    conda env export > pcgr.environment.yml
+
+%runscript
+    source /etc/profile.d/conda.sh

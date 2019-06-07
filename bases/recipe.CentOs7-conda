@@ -1,10 +1,15 @@
 Bootstrap:shub
-From:brucemoran/Singularity:centos7
+From:brucemoran/Singularity:centos7-python_36
+
+%environment
+    export PATH=/usr/local/miniconda/bin:$PATH
 
 %post
 
     #python, conda
     cd /usr/local
     wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
-    bash miniconda.sh -b -p ./miniconda
-    ln -s /usr/local/miniconda/bin/* /usr/local/bin/
+    bash miniconda.sh -b -t -p ./miniconda
+
+    rm -rf miniconda.sh
+    ln -sf /usr/local/miniconda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
