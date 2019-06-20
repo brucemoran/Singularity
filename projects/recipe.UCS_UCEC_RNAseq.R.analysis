@@ -1,0 +1,8 @@
+Bootstrap:shub
+From:brucemoran/Singularity:ucs_ucec_rnaseq.analysis
+
+%post
+
+    cd /usr/local
+
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("GSVA", "readxl" ,"downloader"), dependencies=TRUE, update=TRUE, ask=FALSE, build_vignettes=FALSE)'

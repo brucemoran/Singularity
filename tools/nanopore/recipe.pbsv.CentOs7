@@ -1,0 +1,26 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%help
+    Container for PBSV (https://github.com/PacificBiosciences/pbsv)
+
+%environment
+
+    export PATH=$PATH:/usr/local/pcgr:/usr/local/pcgr/src:/usr/local/pcgr/src/pcgr:/usr/local/pcgr/src/pcgr/lib:/usr/local/cpsr:/usr/local/miniconda/bin
+    export PERL5LIB=/usr/local/miniconda/envs/pcgr/lib/site_perl/5.26.2:/usr/local/miniconda/envs/pcgr/lib/site_perl/5.26.2/x86_64-linux-thread-multi
+
+%post
+
+    ##source and install required
+    source /etc/profile.d/conda.sh
+
+    ##conda install
+
+    cd /usr/local
+    conda install -c bioconda pbsv
+    conda activate pbsv
+    conda update --all
+    conda clean -y -a
+
+    echo "source /etc/profile.d/conda.sh" >> $SINGULARITY_ENVIRONMENT
+    echo "conda activate pbsv" >> $SINGULARITY_ENVIRONMENT

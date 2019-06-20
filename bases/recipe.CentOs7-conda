@@ -1,5 +1,5 @@
 Bootstrap:shub
-From:brucemoran/Singularity:centos7-python_36
+From:brucemoran/Singularity:centos7
 
 %environment
     export PATH=/usr/local/miniconda/bin:$PATH
@@ -13,3 +13,8 @@ From:brucemoran/Singularity:centos7-python_36
 
     rm -rf miniconda.sh
     ln -sf /usr/local/miniconda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
+    source /etc/profile.d/conda.sh
+    conda build purge
+    conda clean -y -a
+
+    echo "/etc/profile.d/conda.sh" >> $SINGULARITY_ENVIRONMENT

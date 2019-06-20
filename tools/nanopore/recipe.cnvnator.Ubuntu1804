@@ -1,0 +1,43 @@
+Bootstrap:docker
+From:wwliao/cnvnator
+
+%help
+    Container for CNVnator Ubuntu18.04
+
+%post
+
+    apt-get update
+    apt-get install -y autoconf \
+                       automake \
+                       make \
+                       gcc \
+                       perl \
+                       zlib1g-dev \
+                       libbz2-dev \
+                       liblzma-dev \
+                       libcurl4-gnutls-dev \
+                       libssl-dev \
+                       libncurses5-dev \
+                       wget
+
+    ##HTSlib
+    cd /usr/local
+    git clone https://github.com/samtools/htslib
+    cd htslib
+    git reset --hard 1832d3a1b75133e55fb6abffc3f50f8a6ed5ceae
+    autoheader
+    autoconf -Wno-syntax
+    ./configure
+    make
+    make install
+
+    ##samtools
+    cd /usr/local
+    git clone https://github.com/samtools/samtools
+    cd samtools
+    git reset --hard b24d8121509cdfc745d73dd3b90da5571a6d4db9
+    autoheader
+    autoconf -Wno-syntax
+    ./configure
+    make
+    make install

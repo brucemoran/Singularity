@@ -11,6 +11,10 @@ From:brucemoran/Singularity:centos7-conda
 
 %post
 
+    ##source and install required
+    source /etc/profile.d/conda.sh
+    /usr/local/miniconda/bin/pip install toml pandas
+
     ##pcgr git
     cd /usr/local
     git clone https://github.com/sigven/pcgr
@@ -24,19 +28,16 @@ From:brucemoran/Singularity:centos7-conda
     git reset --hard b5644c54aad99d272937b5cc7c65385a185fa6e9
 
     cd /usr/local
-    source /etc/profile.d/conda.sh
     conda create -y -n pcgr -c conda-forge -c bioconda -c pcgr pcgr
-    conda clean --all --yes
-
+    conda clean -y -a
     conda activate pcgr
 
-    #install BSgenome.Hsapiens.UCSC.hg19
+    ##install R packages
     chmod 777 /usr/local/miniconda/envs/pcgr/lib/R/library
 
-    ln -sf /usr/local/miniconda/envs/pcgr/bin/python /usr/local/bin/python
-    ln -sf /usr/local/miniconda/envs/pcgr/bin/pip /usr/local/bin/pip
-    pip install toml pandas
-
-    #BiocManager to install packages
+    #BiocManager to install packages, then install
     R --slave -e 'install.packages("BiocManager", repos="http://cran.us.r-project.org")'
-    R --slave -e 'library("BiocManager"); BiocManager::install(c("GenomeInfoDb", "BSgenome.Hsapiens.UCSC.hg19", "BSgenome.Hsapiens.UCSC.hg38"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+    /usr/local/miniconda/envs/pcgr/bin/R --slave -e 'library("BiocManager"); BiocManager::install(c("devtools", "UpSetR", "ggpubr", "GenomeInfoDb", "BSgenome.Hsapiens.UCSC.hg19", "BSgenome.Hsapiens.UCSC.hg38"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+
+    echo "source /etc/profile.d/conda.sh" >> $SINGULARITY_ENVIRONMENT
+    echo "conda activate pcgr" >> $SINGULARITY_ENVIRONMENT
