@@ -2,13 +2,8 @@ Bootstrap:shub
 From:brucemoran/Singularity:centos7
 
 %post
-    yum -y groups mark install "Development Tools"
-    yum -y groups mark convert "Development Tools"
-    yum -y groupinstall "Development Tools"
-    yum -y install epel-release \
-                   git \
-                   wget \
-                   libcurl-devel \
+
+    yum install -y libcurl-devel \
                    cairo-devel \
                    mysql-devel \
                    libxml2-devel \
@@ -29,9 +24,7 @@ From:brucemoran/Singularity:centos7
     echo 'export R_LIBS=/usr/lib64/R/library' >> $SINGULARITY_ENVIRONMENT
 
     export R_LIBS=/usr/lib64/R/library
-    
+
     #BiocManager to allow further install of packages
     mkdir /usr/share/doc/R-3.5.1/html
-    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T); library("BiocManager"); BiocManager::install("tidyverse")'
-
-    chmod -R 777 /usr/lib64/R/library
+    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T); library("BiocManager"); BiocManager::install(c("tidyverse", "ggplot2", "devtools", "plyr", "dplyr"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'

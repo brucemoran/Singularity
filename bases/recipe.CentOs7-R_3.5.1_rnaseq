@@ -1,0 +1,16 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1
+
+%post
+
+    #BiocManager to allow further install of packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("rhdf5", "httr", "tximport", "limma", "DESeq2", "edgeR", "biomaRt", "Biobase", "readxl", "downloader", "gtools"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+
+    R --slave -e 'library("devtools"); devtools::install_github("wilkelab/cowplot", build_vignettes = FALSE); devtools::install_github("pachterlab/sleuth", build_vignettes = FALSE)'
+
+    chmod -R 777 /usr/lib64/R/library
+    for x in org.Hs.eg.db org.Mm.eg.db tximportData reactome.db; do
+      if [[ -d ${x}/extdata ]];then
+        rm -rf ${x}/extdata
+      fi
+    done
