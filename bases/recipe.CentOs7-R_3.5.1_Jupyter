@@ -1,5 +1,5 @@
 Bootstrap:shub
-From:brucemoran/Singularity:centos7-r_3.5.1-rnaseq
+From:brucemoran/Singularity:centos7-r_3.5.1_rnaseq
 
 %post
 
@@ -49,6 +49,3 @@ From:brucemoran/Singularity:centos7-r_3.5.1-rnaseq
     #BiocManager to allow further install of packages
     R --slave -e 'library("BiocManager"); BiocManager::install(); BiocManager::install(c("IRkernel"), dependencies=TRUE, update=TRUE, ask=FALSE); IRkernel::installspec(user = FALSE)'
     R --slave -e 'library("BiocManager"); BiocManager::install(c("Cairo"), dependencies=TRUE, update=TRUE, ask=FALSE)'
-
-    chmod -R 777 /usr/lib64/R/library
-    chmod -R 777 /usr/share/doc/R-3.5.1/*

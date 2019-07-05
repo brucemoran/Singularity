@@ -13,7 +13,7 @@ From:brucemoran/Singularity:centos7
                    libssh2-devel \
                    libgit2-devel
 
-    yum -y install R-3.5.1-1.el7.x86_64
+    yum -y install R.x86_64
     mkdir -p /usr/local/lib64/R/bin
     ln -s /usr/bin/R /usr/local/lib64/R/bin/R
 
@@ -22,9 +22,9 @@ From:brucemoran/Singularity:centos7
 
     ##set R environmental variables
     echo 'export R_LIBS=/usr/lib64/R/library' >> $SINGULARITY_ENVIRONMENT
-
     export R_LIBS=/usr/lib64/R/library
 
     #BiocManager to allow further install of packages
-    mkdir /usr/share/doc/R-3.5.1/html
+    R_DOCS=$(readlink -e /usr/share/doc/R-*)
+    mkdir -p $R_DOCS"/html/"
     R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T); library("BiocManager"); BiocManager::install(c("tidyverse", "ggplot2", "devtools", "plyr", "dplyr"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'

@@ -1,8 +1,13 @@
 Bootstrap:shub
-From:brucemoran/Singularity:centos7-r_3.5.1-jupyter
+From:brucemoran/Singularity:centos7-r_3.5.1_jupyter
 
 %post
 
+    R --slave -e 'library("devtools"); devtools::install_github(c("renozao/rngtools", "renozao/NMF"), build_vignettes = FALSE); library("BiocManager"); BiocManager::install(c("CellMix"), site_repository="http://web.cbio.uct.ac.za/~renaud/CRAN")'
+
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("rngtools", "NMF", "CAMERA", "DEFormats", "apeglm", "ggpubr",  "roots", "viper", "mixtools", "bcellViper", "aracne.networks", "rgexf", "fgsea", "PoiClaClu", "GSVA"),  dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes=FALSE, clean=TRUE)'
+    
     cd /usr/local
 
     yum install -y java-1.8.0-openjdk ant
@@ -12,20 +17,3 @@ From:brucemoran/Singularity:centos7-r_3.5.1-jupyter
     ant main
 
     echo -e "#! /bin/bash\njavamem=""\nif [[ \$1 =~ "-Xmx" ]];then javamem=\$1; shift 1; fi\nexec java \$javamem -jar /usr/local/src/ARACNe-AP/dist/aracne.jar "\$@"" > /usr/local/bin/ARACNe-AP
-
-    #BiocManager to install packages
-    R --slave -e 'library("BiocManager"); BiocManager::install("devtools", dependencies=TRUE, update=TRUE, ask=FALSE)'
-
-    R --slave -e 'library("BiocManager"); BiocManager::install("CellMix", site_repository="http://web.cbio.uct.ac.za/~renaud/CRAN", dependencies=TRUE, update=TRUE, ask=FALSE, build_vignettes=FALSE); BiocManager::install(c( "CAMERA", "DEFormats", "apeglm", , "ggpubr",  "roots", "viper", "mixtools", "bcellViper", "aracne.networks", "rgexf", "fgsea", "PoiClaClu", "GSVA"), dependencies=TRUE, update=TRUE, ask=FALSE, build_vignettes=FALSE)'
-
-
-
-    chmod 777 /usr/lib64/R/library
-    chmod 777 /usr/lib64/R/library/*
-    cd /usr/lib64/R/library
-
-    ##delete some larger unnecessary package files
-    rm -rf org.Hs.eg.db/extdata
-    rm -rf org.Mm.eg.db/extdata
-    rm -rf tximportData/extdata
-    rm -rf reactome.db/extdata
