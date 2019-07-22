@@ -1,0 +1,17 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_r_3.6.0_jupyter
+
+%post
+
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("pkgmaker", "registry", "bibtex", "rngtools", "NMF", "CAMERA", "DEFormats", "apeglm", "ggpubr",  "roots", "viper", "mixtools", "statmod", "bcellViper", "aracne.networks", "rgexf", "fgsea", "PoiClaClu", "GSVA"),  dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes=FALSE, clean=TRUE); BiocManager::install("CellMix", site_repository="http://web.cbio.uct.ac.za/~renaud/CRAN")'
+
+    cd /usr/local
+
+    yum install -y java-1.8.0-openjdk ant
+
+    git clone https://github.com/califano-lab/ARACNe-AP
+    cd ARACNe-AP
+    ant main
+
+    echo -e "#! /bin/bash\njavamem=""\nif [[ \$1 =~ "-Xmx" ]];then javamem=\$1; shift 1; fi\nexec java \$javamem -jar /usr/local/src/ARACNe-AP/dist/aracne.jar "\$@"" > /usr/local/bin/ARACNe-AP

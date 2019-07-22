@@ -1,0 +1,5 @@
+Bootstrap:docker
+From:aphoid/octopus
+
+%help
+  Octopus variant caller

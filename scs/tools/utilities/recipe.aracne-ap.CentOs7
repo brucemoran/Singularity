@@ -1,0 +1,32 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_java8
+
+%help
+    Container for ARACNe-AP v0.1 30967ea10494fcb42c2bfd00604c94907da5397b
+
+%environment
+    export ANT_HOME=/usr/local/apache-ant-1.9.13
+    export PATH=$PATH:${ANT_HOME}/bin
+
+
+%post
+
+    export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
+
+    ##install Apache ANT
+    cd /usr/local
+    wget https://www-eu.apache.org/dist/ant/binaries/apache-ant-1.9.13-bin.tar.gz
+    tar -xf apache-ant-1.9.13-bin.tar.gz
+    export ANT_HOME=/usr/local/apache-ant-1.9.13
+    export PATH=$PATH:${ANT_HOME}/bin
+
+    git clone https://github.com/califano-lab/ARACNe-AP
+    cd ARACNe-AP
+    git reset --hard 30967ea10494fcb42c2bfd00604c94907da5397b
+    ant main
+
+    ##create executable
+    ##NB allows Xmx for resource allocation only
+    chmod a+x /usr/local/ARACNe-AP/dist/aracne.jar
+    echo -e "#! /bin/bash\njavamem=""\nif [[ \$1 =~ "-Xmx" ]];then javamem=\$1; shift 1; fi\nexec java \$javamem -jar /usr/local/ARACNe-AP/dist/aracne.jar "\$@"" > /usr/local/bin/ARACNe-AP
+    chmod a+x /usr/local/bin/ARACNe-AP

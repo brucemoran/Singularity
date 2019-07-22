@@ -1,0 +1,24 @@
+Bootstrap:docker
+From:broadinstitute/gatk
+
+%help
+    Container for gatk v4.1.0 from Docker
+
+%post
+    ##Install Picard-Tools a la https://hub.docker.com/r/broadinstitute/picard
+    apt-get update && apt-get install -y git
+    git clone https://github.com/broadinstitute/picard.git
+    cd picard/
+    ./gradlew shadowJar
+
+    ##create executable
+    ##NB allows Xmx for resource allocation only
+    chmod a+x /picard/build/libs/picard.jar
+    echo "#! /bin/bash
+javamem=\"\";
+if [[ \$1 =~ "-Xmx" ]]; then
+  javamem=\$1;
+  shift 1;
+fi
+exec /usr/bin/java \$javamem -jar /picard/build/libs/picard.jar \$@" > /bin/picard-tools
+    chmod a+x /bin/picard-tools

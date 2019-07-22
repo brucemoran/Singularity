@@ -1,0 +1,5 @@
+Bootstrap:docker
+From:astewart/pisces
+
+%help
+    Container for pisces variant caller for tumour-only https://github.com/Illumina/Pisces

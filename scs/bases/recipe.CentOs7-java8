@@ -1,0 +1,12 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7
+
+%environment
+    export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk PATH=$PATH:$JAVA_HOME/bin
+
+%post
+
+    yum -y install java-1.8.0-openjdk-devel.x86_64
+
+    ##update alternatives
+    update-alternatives --install /usr/bin/java java /etc/alternatives/java_sdk_1.8.0_openjdk/bin/java 1

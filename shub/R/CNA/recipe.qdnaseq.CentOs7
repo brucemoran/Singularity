@@ -1,0 +1,10 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1
+
+%post
+
+    ##set R environmental variables
+    echo 'export R_LIBS=/usr/lib64/R/library' >> $SINGULARITY_ENVIRONMENT
+
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("QDNAseq", "QDNAseq.hg19", "PSCBS", "matrixStats", "ggplot2", "caTools"), dependencies=TRUE, update=TRUE, ask=FALSE)'

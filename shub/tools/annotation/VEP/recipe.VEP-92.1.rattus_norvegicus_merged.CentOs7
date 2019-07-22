@@ -1,0 +1,18 @@
+Bootstrap:shub
+From:brucemoran/Singularity:vep-92.1.centos7
+
+%help
+    Container for VEP_92.1 rattus_norvegicus_merged cache
+
+%post
+
+    ##install cache
+    cd /usr/local/ensembl-vep
+    perl ./INSTALL.pl --AUTO ac \
+                      --CACHEDIR "/usr/local/ensembl-vep/cache" \
+                      --SPECIES "rattus_norvegicus_merged" \
+                      --NO_UPDATE \
+                      --NO_HTSLIB \
+                      --PLUGINS "dbNSFP,RefSeqHGVS"
+
+    ln -s /usr/local/ensembl-vep/* /usr/local/bin/

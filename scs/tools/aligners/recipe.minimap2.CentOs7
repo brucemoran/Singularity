@@ -1,0 +1,16 @@
+Bootstrap:library
+From:bruce.moran/default/utilities:samtools
+
+%help
+    Container for minimap2 aligner
+
+%post
+
+    ##minimap2
+    cd /usr/local
+    git clone https://github.com/lh3/minimap2
+    cd minimap2
+    git reset --hard 7bc87b4175dcf3b6df7d4f6ae9db5f3eadd30302
+    make
+
+    ln -sf /usr/local/minimap2/minimap2 /usr/bin/

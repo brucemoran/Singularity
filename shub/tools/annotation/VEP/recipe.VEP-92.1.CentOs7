@@ -1,0 +1,80 @@
+Bootstrap:shub
+From:brucemoran/Singularity:samtools.centos7
+
+%help
+    Container for VEP_92.1 homo_sapiens_merged hg38 cache
+
+%post
+
+    ##thanks to ##https://github.com/CHRUdeLille/vep_containers/blob/master/92/Singularity.92
+
+    #essential utilities
+    yum install -y which \
+                   unzip \
+                   zlib-devel \
+                   libzip-devel \
+                   bzip2-libs \
+                   libz-devel \
+                   xz-devel \
+                   ncurses-devel \
+                   curl-devel \
+                   mysql \
+                   mysql-devel
+
+    #Ensembl VEP
+    ##required Perl installs
+    yum install -y perl-CPAN \
+                   perl-DBI \
+                   perl-DBD-MySQL \
+                   perl-IO-Socket-SSL \
+                   perl-Archive-Any \
+                   perl-YAML \
+                   perl-CPAN-Meta \
+                   perl-Digest-MD5 \
+                   perl-App-cpanminus \
+                   perl-local-lib
+
+    cpanm --force --local-lib "/usr/local" ExtUtils::MakeMaker Module::Build
+
+    cd /usr/local
+    git clone -b release/92 https://github.com/Ensembl/ensembl.git
+    git clone -b release/92 https://github.com/Ensembl/ensembl-vep.git
+    ensembl-vep/travisci/get_dependencies.sh
+
+    PERL5LIB=$PERL5LIB:/usr/local/lib/perl5:/usr/local/src/bioperl-live-release-1-6-924
+    export KENT_SRC=/usr/local/kent-335_base/src
+    export HTSLIB_DIR=/usr/local/htslib
+    export MACHTYPE=x86_64
+    export CFLAGS="-fPIC"
+    export DEPS=/usr/local
+    ensembl-vep/travisci/build_c.sh
+    cd $HTSLIB_DIR
+    make install
+
+    cd /usr/local
+    git clone https://github.com/bioperl/bioperl-ext.git
+    cd bioperl-ext
+    git reset --hard 1b59725
+    cd Bio/Ext/Align/
+    perl -pi -e"s|(cd libs.+)CFLAGS=\\\'|\$1CFLAGS=\\\'-fPIC |" Makefile.PL
+    perl Makefile.PL
+    make
+    make install
+    cd /usr/local/ensembl-vep
+    chmod u+x *.pl
+    PERL5LIB=$PERL5LIB:/usr/local/bioperl-live-release-1-6-924:/usr/local/ensembl-vep
+    echo 'export PERL5LIB' >> $SINGULARITY_ENVIRONMENT
+
+    ##example install cache
+    ##perl ./INSTALL.pl --AUTO ac \
+    ##                  --CACHEDIR "/usr/local/ensembl-vep/cache" \
+    ##                  --SPECIES "homo_sapiens_merged" \
+    ##                  --ASSEMBLY "GRCh38" \
+    ##                  --NO_UPDATE \
+    ##                  --NO_HTSLIB \
+    ##                  --PLUGINS "dbNSFP,RefSeqHGVS"
+
+    ##for no install of cache
+    ##perl ./INSTALL.pl --AUTO a --NO_UPDATE --NO_HTSLIB
+
+    ##ln -s /usr/local/ensembl-vep/vep /usr/local/bin/

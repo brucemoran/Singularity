@@ -1,0 +1,15 @@
+Bootstrap:docker
+From:centos:centos7.4.1708
+
+%post
+    yum -y groups mark install "Development Tools"
+    yum -y groups mark convert "Development Tools"
+    yum -y groupinstall "Development Tools"
+    yum -y install epel-release \
+                   git \
+                   wget \
+                   which \
+                   emacs
+
+    ##locales
+    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C LD_LIBRARY_PATH=/usr/lib64' >> $SINGULARITY_ENVIRONMENT

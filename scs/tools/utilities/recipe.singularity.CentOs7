@@ -1,0 +1,33 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7
+
+%help
+    Container for Singularity 3.0
+
+%post
+
+    yum install -y openssl-devel \
+                   libuuid-devel \
+                   libseccomp-devel \
+                   squashfs-tools
+
+    ##Go
+    cd /usr/local
+    export VERSION=1.12.1 OS=linux ARCH=amd64
+    wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz
+    tar -xf go$VERSION.$OS-$ARCH.tar.gz
+    rm go$VERSION.$OS-$ARCH.tar.gz
+    mkdir /usr/local/gogo
+    export GOPATH=/usr/local/gogo
+    export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
+    go get -u github.com/golang/dep/cmd/dep
+
+    ##Singularity
+    mkdir -p $GOPATH/src/github.com/sylabs
+    cd $GOPATH/src/github.com/sylabs
+    git clone https://github.com/sylabs/singularity.git
+    cd singularity
+    git reset --hard aba105425005bf776f0ffe1d8762c575b410de11
+    ./mconfig
+    make -C builddir
+    make -C builddir install

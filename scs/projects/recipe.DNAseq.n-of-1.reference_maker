@@ -1,0 +1,61 @@
+Bootstrap:shub
+From:brucemoran/Singularity:facets.centos7
+
+%help
+    Container for reference data generation for DNAseq.n-of-1.simg.nf NextFlow pipeline
+
+%post
+
+    yum -y install java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64 \
+                   python36 \
+                   unzip \
+                   libz-devel \
+                   mysql \
+                   mysql-devel
+
+    echo 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64/jre' >> $SINGULARITY_ENVIRONMENT
+
+    ln -sf /usr/bin/python3.6 /usr/bin/python
+
+    ##samtools
+    cd /usr/local
+    git clone https://github.com/samtools/samtools
+    cd samtools
+    git reset --hard b24d8121509cdfc745d73dd3b90da5571a6d4db9
+    autoheader && autoconf -Wno-syntax
+    ./configure
+    make
+    make install
+
+    ##picard-tools
+    cd /usr/local
+    mkdir picard-tools && cd picard-tools
+    wget https://github.com/broadinstitute/picard/releases/download/2.18.26/picard.jar
+
+    ##create executable
+    ##NB allows Xmx for resource allocation only
+    chmod a+x /usr/local/picard-tools/picard.jar
+    echo -e "#! /bin/bash\njavamem=""\nif [[ \$1 =~ "-Xmx" ]];then javamem=\$1; shift 1; fi\nexec java \$javamem -jar /usr/local/picard-tools/picard.jar "\$@"" > /usr/local/bin/picard-tools
+    chmod a+x /usr/local/bin/picard-tools
+
+    ##bedtools2
+    cd /usr/local
+    git clone https://github.com/arq5x/bedtools2
+    cd bedtools2
+    git reset --hard 1de417b904acd872e1fd6d1e5e680ddab1c11b79
+    make
+    ln -s /usr/local/bedtools2/bedtools/bin/* /usr/local/bin/
+
+    ##sequenza
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("sequenza"), dependencies=TRUE, update=TRUE, ask=FALSE)'
+
+    ln -sf /usr/lib64/R/library/sequenza/exec/sequenza-utils.py /usr/bin/sequenza-utils.py
+
+    ##msisensor
+    cd /usr/local
+    git clone https://github.com/ding-lab/msisensor
+    cd msisensor
+    git reset --hard dac94a8c00851a95fa79f0898e4ff21d4ba40408
+    make
+
+    ln -s /usr/local/msisensor/msisensor /usr/local/bin/msisensor

@@ -1,0 +1,38 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7
+
+%environment
+    export R_LIBS=/usr/lib64/R/library
+
+%post
+
+    yum install -y libcurl-devel \
+                   cairo-devel \
+                   mysql-devel \
+                   libxml2-devel \
+                   netcdf-devel \
+                   udunits2-devel \
+                   openssl-devel \
+                   libssh2-devel \
+                   libgit2-devel
+
+    yum -y install R.x86_64
+    mkdir -p /usr/local/lib64/R/bin
+    ln -s /usr/bin/R /usr/local/lib64/R/bin/R
+
+    ##locales
+    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C' >> $SINGULARITY_ENVIRONMENT
+
+    ##set R environmental variables
+    export R_LIBS=/usr/lib64/R/library
+
+    #create html doc path
+    export R_DOCS=$(readlink -e /usr/share/doc/R-*)
+    mkdir -p $R_DOCS"/html/"
+
+    #BiocManager install, update bioconductor
+    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T); library("BiocManager");
+    BiocManager::install()'
+
+    #BiocManager to allow further install of packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("tidyverse", "ggplot2", "devtools", "plyr", "dplyr"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'

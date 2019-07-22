@@ -1,0 +1,19 @@
+Bootstrap:shub
+From:brucemoran/Singularity:vep-92.1.centos7
+
+%help
+    Container for VEP_92.1 homo_sapiens_merged GRCh37 cache
+
+%post
+
+    ##install cache
+    cd /usr/local/ensembl-vep
+    perl ./INSTALL.pl --AUTO ac \
+                      --CACHEDIR "/usr/local/ensembl-vep/cache" \
+                      --SPECIES "homo_sapiens_merged" \
+                      --ASSEMBLY "GRCh37" \
+                      --NO_UPDATE \
+                      --NO_HTSLIB \
+                      --PLUGINS "dbNSFP,RefSeqHGVS"
+
+    ln -s /usr/local/ensembl-vep/* /usr/local/bin/

@@ -1,0 +1,18 @@
+Bootstrap:library
+From:bruce.moran/default/utilities:samtools.centos7
+
+%help
+    Container for BCFtools v1.9 Git commit 7d99bc1a047688dcee8ae1240c1bfaa8acbab9da
+
+%post
+
+    ##BCFtools
+    cd /usr/local
+    wget https://github.com/samtools/bcftools/archive/1.9.tar.gz
+    tar -xf 1.9.tar.gz
+    cd bcftools-1.9/
+    autoheader
+    autoconf -Wno-syntax
+    ./configure
+    make
+    make install

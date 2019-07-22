@@ -1,0 +1,16 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-r_3.5.1
+
+%post
+    ##need python36
+    yum -y install python36
+
+    ln -sf /usr/bin/python3.6 /usr/bin/python
+
+    ##set R environmental variables
+    echo 'export R_LIBS=/usr/lib64/R/library' >> $SINGULARITY_ENVIRONMENT
+
+    #BiocManager to install packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("sequenza"), dependencies=TRUE, update=TRUE, ask=FALSE)'
+
+    ln -sf /usr/lib64/R/library/sequenza/exec/sequenza-utils.py /usr/bin/sequenza-utils.py

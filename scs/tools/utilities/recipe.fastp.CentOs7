@@ -1,0 +1,19 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_java8
+
+%help
+    Container for fastp
+
+%post
+
+    ln -s /usr/lib64/libz.so.1 /usr/lib64/libz.so
+
+    #fastqc
+    cd /usr/local
+    git clone https://github.com/OpenGene/fastp
+    cd fastp
+    git reset --hard e01e9402c3d5afded49b21c8303be51d7cbb2d27
+    make
+    make install
+
+    ln -sf /usr/local/fastp/fastp /usr/local/bin/

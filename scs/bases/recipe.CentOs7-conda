@@ -1,0 +1,20 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_python36
+
+%environment
+    export PATH=/usr/local/miniconda/bin:$PATH
+    bash /etc/profile.d/conda.sh
+
+%post
+
+    #conda
+    cd /usr/local
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    bash miniconda.sh -b -p ./miniconda
+
+    rm -rf miniconda.sh
+    ln -sf /usr/local/miniconda/etc/profile.d/conda.sh /etc/profile.d/conda.sh
+    source /etc/profile.d/conda.sh
+    conda install conda-build
+    conda build purge
+    conda clean -y -a

@@ -1,0 +1,43 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7
+
+%environment
+    export R_LIBS=/usr/lib64/R/library
+    export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C
+
+%post
+
+    yum install -y libcurl-devel \
+                   cairo-devel \
+                   mysql-devel \
+                   libxml2-devel \
+                   netcdf-devel \
+                   udunits2-devel \
+                   openssl-devel \
+                   libssh2-devel \
+                   libgit2-devel \
+                   readline-devel \
+                   bzip2-devel \
+                   bzip2-libs
+
+    cd /usr/local
+    wget https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz
+    tar -xf R-3.5.2.tar.gz
+    cd R-3.5.2
+    ./configure --with-x=no
+    make
+    make install
+
+    ##set R environmental variables
+    export R_LIBS=/usr/lib64/R/library
+
+    #create html doc path
+    export R_DOCS=$(readlink -e /usr/share/doc/R-*)
+    mkdir -p $R_DOCS"/html/"
+
+    #BiocManager install, update bioconductor
+    R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T); library("BiocManager");
+    BiocManager::install()'
+
+    #BiocManager to allow further install of packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("tidyverse", "ggplot2", "devtools", "plyr", "dplyr"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'

@@ -1,0 +1,11 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-python_36
+
+%help
+    Container for NanoStat nanopore QC
+
+%post
+
+    ##NanoStat
+    pip3 install --upgrade pip
+    pip3 install nanostat
