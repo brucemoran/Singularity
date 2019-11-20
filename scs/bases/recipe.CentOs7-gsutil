@@ -1,0 +1,23 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7
+
+%environment
+    export "PATH=$PATH:/usr/local/gsutil"
+
+%post
+
+    cd /usr/local
+    wget https://storage.googleapis.com/pub/gsutil.tar.gz
+    tar -xf gsutil.tar.gz
+    mv /usr/local/gsutil/gsutil /usr/local/gsutil/gsutil.1
+    echo "#!/usr/bin/python2.7" > /usr/local/gsutil/gsutil
+    tail -n+2 /usr/local/gsutil/gsutil.1 >> /usr/local/gsutil/gsutil
+    chmod +x /usr/local/gsutil/gsutil
+    export "PATH=$PATH:/usr/local/gsutil"
+    exec -l $SHELL
+
+    ##https://cloud.google.com/storage/docs/gsutil/addlhelp/CRC32CandInstallingcrcmod#centos-rhel-and-fedora
+    yum install -y gcc python-devel python-setuptools redhat-rpm-config python-pip
+    python -m pip install -U pip  # Upgrade old default version of pip
+    python -m pip uninstall crcmod
+    python -m pip install --no-cache-dir -U crcmod

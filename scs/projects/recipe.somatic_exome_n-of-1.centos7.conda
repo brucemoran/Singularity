@@ -1,0 +1,35 @@
+Bootstrap:library
+From:bruce.moran/default/variant_callers:manta-strelka2.centos7
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate somatic_exome_n-of-1
+
+%post
+
+    ##conda
+    wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    bash ./miniconda.sh -b -p /opt/miniconda
+    rm -rf miniconda.sh
+    export CONDA_PKGS_PATH=/opt/miniconda/pkgs
+    export CONDA_ENVS_PATH=/opt/miniconda/envs
+    export PATH="/opt/miniconda/bin:$PATH"
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##conda env
+    git clone https://github.com/brucemoran/somatic_exome_n-of-1
+    cd somatic_exome_n-of-1
+    conda env create -n somatic_exome_n-of-1 -f environment.yaml
+    conda clean -y -a
+    rm -rf somatic_exome_n-of-1
+
+    ##compile snp-pileup
+    g++ -std=c++11 -I $CONDA_ENVS_PATH/somatic_exome_n-of-1/include $CONDA_ENVS_PATH/somatic_exome_n-of-1/lib/R/library/facets/extcode/snp-pileup.cpp -L$CONDA_ENVS_PATH/somatic_exome_n-of-1/include -lhts -Wl,-rpath=$CONDA_ENVS_PATH/somatic_exome_n-of-1/include -o $CONDA_ENVS_PATH/somatic_exome_n-of-1/lib/R/library/facets/extcode/snp-pileup
+
+    ##linking
+    ln -sf /opt/miniconda/envs/somatic_exome_n-of-1/lib/*.s* /usr/lib64/
+    ln -s $CONDA_ENVS_PATH/somatic_exome_n-of-1/lib/R/library/facets/extcode/snp-pileup /usr/local/bin/snp-pileup
+
+    ##liftover
+    chmod +x $CONDA_ENVS_PATH/somatic_exome_n-of-1/bin/liftOver

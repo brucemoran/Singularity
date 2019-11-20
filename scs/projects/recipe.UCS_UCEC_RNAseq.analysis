@@ -1,10 +1,10 @@
 Bootstrap:library
-From:bruce.moran/default/bases:centos7_r_3.6.0_jupyter
+From:bruce.moran/default/bases:centos7_r_3.5.2_rnaseq_jupyter
 
 %post
 
     #BiocManager to install packages
-    R --slave -e 'library("BiocManager"); BiocManager::install(c("pkgmaker", "registry", "bibtex", "rngtools", "NMF", "CAMERA", "DEFormats", "apeglm", "ggpubr",  "roots", "viper", "mixtools", "statmod", "bcellViper", "aracne.networks", "rgexf", "fgsea", "PoiClaClu", "GSVA"),  dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes=FALSE, clean=TRUE); BiocManager::install("CellMix", site_repository="http://web.cbio.uct.ac.za/~renaud/CRAN")'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("TCGAbiolinks", "pkgmaker", "registry", "bibtex", "rngtools", "NMF", "CAMERA", "DEFormats", "apeglm", "ggpubr",  "roots", "viper", "mixtools", "statmod", "bcellViper", "aracne.networks", "rgexf", "fgsea", "PoiClaClu", "GSVA"),  dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes=FALSE, clean=TRUE); BiocManager::install("CellMix", site_repository="http://web.cbio.uct.ac.za/~renaud/CRAN")'
 
     cd /usr/local
 

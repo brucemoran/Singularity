@@ -18,4 +18,4 @@ From:bruce.moran/default/bases:centos7_r_3.5.2
     R --slave -e 'library("devtools"); devtools::install_github("mskcc/facets", build_vignettes = FALSE, ref="434b5ce5903dc6b42e3c31fcfdceb9dddc56d82c", dependencies=TRUE)'
 
     #BiocManager to install packages
-    R --slave -e 'library("BiocManager"); BiocManager::install(c( "EnsDb.Hsapiens.v75", "org.Hs.eg.db", "ensembldb", "ensemblVEP", "GenomicRanges", "QDNAseq", "QDNAseq.hg19", "PSCBS", "matrixStats", "caTools", "pheatmap", "data.table", "customProDB"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c( "EnsDb.Hsapiens.v75", "org.Hs.eg.db", "ensembldb", "ensemblVEP", "GenomicRanges", "QDNAseq", "QDNAseq.hg19", "PSCBS", "matrixStats", "caTools", "pheatmap", "data.table", "rtracklayer",  "customProDB"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'

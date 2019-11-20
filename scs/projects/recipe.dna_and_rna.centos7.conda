@@ -1,0 +1,26 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_conda
+
+%environment
+
+    PATH="/opt/miniconda/envs/dna_and_rna/bin:$PATH"
+    LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/htslib:/usr/lib64:/bin"
+    PERL5LIB=/opt/miniconda/envs/dna_and_rna/share
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate dna_and_rna
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##conda env
+    git clone https://github.com/brucemoran/dna_and_rna
+    cd dna_and_rna
+    conda env create -p /opt/miniconda/envs/dna_and_rna -f environment.yaml
+    conda clean -y -a
+
+    ##bbmap adapters
+    cd /usr/local
+    wget https://downloads.sourceforge.net/project/bbmap/BBMap_38.36.tar.gz
+    tar -xf BBMap_38.36.tar.gz
+    rm BBMap_38.36.tar.gz

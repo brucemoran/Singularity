@@ -1,0 +1,63 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_r_3.5.2_rnaseq
+
+%post
+    yum -y update
+    yum -y install firefox.x86_64 \
+                   libXt-devel \
+                   libX11-devel \
+                   ImageMagick-c++-devel \
+                   xorg-x11* \
+                   xauth \
+                   dbus-x11 \
+                   freetype \
+                   mesa-libGL \
+                   perl-Digest-MD5
+
+    ##workaround X11/png clash in Jupyter Notebook
+    ##see: https://github.com/IRkernel/IRkernel/issues/388
+    echo "options(bitmapType='cairo')" >> /usr/local/lib64/R/Rprofile.site
+    echo "options(device=png)" >> /usr/local/lib64/R/Rprofile.site
+
+    ##set library, Rprofile where IRkernel installed
+    echo 'export R_LIBS=/usr/local/lib64/R/library R_ENVIRON=/usr/local/lib64/R/Rprofile.site' >> $SINGULARITY_ENVIRONMENT
+
+    #python, Jupyter
+    yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+    yum -y install python36
+    yum -y install python36-pip \
+                   python36-devel
+    python3.6 -m pip install jupyter
+
+    ##error on mkdir permission for /run/users/1001 where Jupyter likes to run
+    chmod -R 777 /run
+
+    ##install X11 for Jupyter from:
+    #https://www.itzgeek.com/how-tos/linux/centos-how-tos/install-gnome-gui-on-centos-7-rhel-7.html
+    ln -sf /lib/systemd/system/runlevel5.target /etc/systemd/system/default.target
+
+    ##install hide_code feature in Jupyter for HTML export
+    pip3.6 install hide_code
+    jupyter nbextension install --py hide_code
+    jupyter nbextension enable --py hide_code
+    jupyter serverextension enable --py hide_code
+    jupyter serverextension enable --py hide_code
+
+    ##jupytext
+    pip3.6 install pyyaml mock testfixtures
+    pip3.6 install jupytext --upgrade
+
+    ##texlive for nbconvert
+    cd /usr/local
+    wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+    tar -xf install-tl-unx.tar.gz
+    cd install-tl-*
+    touch empty.profile
+    ./install-tl --profile=empty.profile
+    rm -rf /usr/local/texlive/2019/texmf-dist/doc
+
+    echo 'export PATH=/usr/local/texlive/2019/bin/x86_64-linux:$PATH' >> $SINGULARITY_ENVIRONMENT
+
+    #BiocManager to allow further install of packages
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("IRkernel"), dependencies=TRUE, update=FALSE, ask=FALSE); IRkernel::installspec(user = FALSE)'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("Cairo"), dependencies=TRUE, update=FALSE, ask=FALSE)'

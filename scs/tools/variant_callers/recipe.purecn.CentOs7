@@ -1,0 +1,21 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_conda
+
+%help
+    Container for PureCN caller v1.2.1 Git commit 64252d9328a2c638685310dc1ddf714043dac4a2
+
+%environment
+
+    PATH="/opt/miniconda/envs/varlociraptor/bin:$PATH"
+    LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib64:/bin"
+    PERL5LIB=/opt/miniconda/envs/varlociraptor/share
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate varlociraptor
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda config --add channels defaults
+    conda config --add channels bioconda
+    conda config --add channels conda-forge
+    conda create --name varlociraptor varlociraptor

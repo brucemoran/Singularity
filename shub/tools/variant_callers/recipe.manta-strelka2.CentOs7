@@ -7,7 +7,7 @@ From:brucemoran/Singularity:centos7
 %post
 
     yum install -y which \
-                   python36 \
+                   python27 \
                    make \
                    cmake3 \
                    zlib-devel \
@@ -16,7 +16,7 @@ From:brucemoran/Singularity:centos7
                    gcc \
                    libstdc++-static
 
-    ln -sf /usr/bin/python3.6 /usr/bin/python
+    ln -sf /usr/bin/python2.7 /usr/bin/python
     ln -sf /usr/bin/cmake3 /usr/bin/cmake
 
     export CC=/usr/bin/gcc
@@ -42,3 +42,6 @@ From:brucemoran/Singularity:centos7
     ../configure --prefix=/usr/local \
                  --with-cmake=/usr/bin/cmake
     make install
+
+    ##rm demo ~300MB
+    rm -rf /usr/local/share/demo

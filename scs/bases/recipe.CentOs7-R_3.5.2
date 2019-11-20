@@ -2,12 +2,13 @@ Bootstrap:library
 From:bruce.moran/default/bases:centos7
 
 %environment
-    export R_LIBS=/usr/lib64/R/library
+    export R_LIBS=/usr/local/lib64/R/library
     export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C
 
 %post
 
-    yum install -y libcurl-devel \
+    yum install -y curl \
+                   libcurl-devel \
                    cairo-devel \
                    mysql-devel \
                    libxml2-devel \
@@ -18,7 +19,9 @@ From:bruce.moran/default/bases:centos7
                    libgit2-devel \
                    readline-devel \
                    bzip2-devel \
-                   bzip2-libs
+                   bzip2-libs \
+                   zli \
+                   zlib-dev
 
     cd /usr/local
     wget https://cran.r-project.org/src/base/R-3/R-3.5.2.tar.gz
@@ -29,7 +32,7 @@ From:bruce.moran/default/bases:centos7
     make install
 
     ##set R environmental variables
-    export R_LIBS=/usr/lib64/R/library
+    export R_LIBS=/usr/local/lib64/R/library
 
     #create html doc path
     export R_DOCS=$(readlink -e /usr/share/doc/R-*)
@@ -39,5 +42,7 @@ From:bruce.moran/default/bases:centos7
     R --slave -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/", quiet=T); library("BiocManager");
     BiocManager::install()'
 
+    R --slave -e 'install.packages("https://cran.r-project.org/src/contrib/Archive/curl/curl_4.0.tar.gz", repo=NULL, type="source")'
+
     #BiocManager to allow further install of packages
-    R --slave -e 'library("BiocManager"); BiocManager::install(c("tidyverse", "ggplot2", "devtools", "plyr", "dplyr"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("tidyverse", "ggplot2", "devtools", "plyr", "dplyr"), dependencies=c("Depends", "Imports", "LinkingTo"), update=FALSE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'

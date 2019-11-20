@@ -1,0 +1,27 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_conda
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate TCGA_fastq_download
+    export PATH="/usr/local/bin:/opt/miniconda/envs/TCGA_fastq_download/bin:$PATH"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/miniconda/envs/TCGA_fastq_download/lib:/opt/miniconda/envs/TCGA_fastq_download/lib64"
+    export PERL5LIB=/opt/miniconda/envs/TCGA_fastq_download/share
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##conda env
+    git clone https://github.com/brucemoran/TCGA_fastq_download
+    cd TCGA_fastq_download
+    conda env create -n TCGA_fastq_download -f environment.yaml
+    conda clean -y -a
+
+    ##legacy mapping script
+    cd /usr/local/bin
+    wget https://raw.githubusercontent.com/chunjie-sam-liu/useful-scripts/master/mapFileUUID2submitterID.py
+    sed 's#files_endpt = "https://gdc-api.nci.nih.gov/files"#files_endpt = "https://api.gdc.cancer.gov/legacy/files"#' mapFileUUID2submitterID.py | sed 's#/usr/bin/python#/opt/miniconda/envs/TCGA_fastq_download/bin/python#' > mapFileUUID2submitterID.legacy.py
+
+    chmod +x mapFileUUID2submitterID.legacy.py

@@ -1,0 +1,24 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_conda
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate SHARC
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##virtual env
+    cd /opt
+    git clone https://github.com/brucemoran/SHARC
+    cd SHARC
+    conda env create -n SHARC -f environment.yaml
+    conda clean -y -a
+
+    mkdir -p /opt/miniconda/envs/SHARC/etc/conda/activate.d
+    echo -e "#! /bin/bash\n
+    export PATH=/opt/miniconda/envs/SHARC/bin:/opt/SHARC/scripts:/opt/SHARC/steps:/opt/SHARC:$PATH\n
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/htslib:/usr/lib64:/bin\n
+    export PERL5LIB=/opt/miniconda/envs/SHARC/share\n" > /opt/miniconda/envs/SHARC/etc/conda/activate.d/env_vars.sh

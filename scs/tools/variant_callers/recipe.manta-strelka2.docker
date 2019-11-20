@@ -1,5 +1,5 @@
 Bootstrap:docker
-From:cmopipeline/strelka2_manta
+From:cmopipeline/strelka2-manta-bcftools-vt
 
 %help
     Container for manta, stelka2 callers

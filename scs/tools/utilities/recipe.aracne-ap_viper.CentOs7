@@ -1,16 +1,21 @@
 Bootstrap:library
-From:bruce.moran/default/bases:centos7_java8
+From:bruce.moran/default/bases:centos7_r_3.5.2
 
 %help
     Container for ARACNe-AP v0.1 30967ea10494fcb42c2bfd00604c94907da5397b
 
 %environment
-    export ANT_HOME=/usr/local/apache-ant-1.9.13
-    export PATH=$PATH:${ANT_HOME}/bin
 
+    ANT_HOME=/usr/local/apache-ant-1.9.13
+    PATH=$PATH:${ANT_HOME}/bin
+    JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
 
 %post
 
+    yum -y install java-1.8.0-openjdk-devel.x86_64 tzdata
+
+    ##update alternatives
+    update-alternatives --install /usr/bin/java java /etc/alternatives/java_sdk_1.8.0_openjdk/bin/java 1
     export JAVA_HOME=/etc/alternatives/java_sdk_1.8.0_openjdk
 
     ##install Apache ANT
@@ -30,3 +35,6 @@ From:bruce.moran/default/bases:centos7_java8
     chmod a+x /usr/local/ARACNe-AP/dist/aracne.jar
     echo -e "#! /bin/bash\njavamem=""\nif [[ \$1 =~ "-Xmx" ]];then javamem=\$1; shift 1; fi\nexec java \$javamem -jar /usr/local/ARACNe-AP/dist/aracne.jar "\$@"" > /usr/local/bin/ARACNe-AP
     chmod a+x /usr/local/bin/ARACNe-AP
+
+    ##R packages for viper
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("httr", "limma", "CAMERA", "DEFormats", "apeglm", "biomaRt", "reshape2", "roots", "viper", "mixtools", "Biobase", "rgexf", "fgsea", "gtools", "tximport", "aracne.networks"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'

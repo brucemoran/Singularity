@@ -2,6 +2,7 @@ Bootstrap:docker
 From:cmopipeline/strelka2_manta
 
 %help
+
     Container for manta, stelka2 callers
 
 %post
