@@ -7,7 +7,7 @@ From:bruce.moran/default/bases:centos7-gsutil
 
 %environment
 
-    PATH=/strelka-2.9.10.centos6_x86_64/bin:/manta-1.5.1.centos6_x86_64/bin:${PATH}
+    export PATH=/strelka-2.9.10.centos6_x86_64/bin:/manta-1.5.1.centos6_x86_64/bin:${PATH}
 
 %post
 

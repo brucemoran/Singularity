@@ -8,6 +8,40 @@ From:bruce.moran/default/variant_callers:manta-strelka2.centos7
 
 %post
 
+    ##dependencies for Lancet
+    yum -y install libcurl-devel \
+                   curl \
+                   xz-devel \
+                   bzip2-devel \
+                   cmake3 \
+                   make
+
+    ln -sf /usr/bin /
+    ln -sf /usr/bin/cmake3 /usr/bin/cmake
+
+    ##bedtools2
+    cd /usr/local
+    git clone https://github.com/arq5x/bedtools2
+    cd bedtools2
+    git reset --hard 1de417b904acd872e1fd6d1e5e680ddab1c11b79
+    make
+    make install
+
+    ##lancet
+    cd /usr/local
+    git clone https://github.com/nygenome/lancet
+    cd lancet
+    git reset --hard 714e1694097735490eb9fe5f5670d44292990b33
+    cd bamtools-2.5.1
+    mkdir build
+    cd build
+    cmake ../
+    make
+    cd ../..
+    export LIBRARY_PATH=/usr/local/lancet/bamtools-2.5.1/build/src/api/include/:/usr/local/lancet/htslib-1.8:/usr/local/lancet/htslib-1.8/htslib:/usr/local/lib:/bin:${LIBRARY_PATH} LD_LIBRARY_PATH=/usr/local/lancet/bamtools-2.5.1/lib:/usr/local/lancet/htslib-1.8:/usr/local/lancet/htslib-1.8/htslib:/usr/local/lib:/bin:${LD_LIBRARY_PATH}
+    ldconfig /usr/bin
+    make
+
     ##conda
     wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
     bash ./miniconda.sh -b -p /opt/miniconda
@@ -15,6 +49,7 @@ From:bruce.moran/default/variant_callers:manta-strelka2.centos7
     export CONDA_PKGS_PATH=/opt/miniconda/pkgs
     export CONDA_ENVS_PATH=/opt/miniconda/envs
     export PATH="/opt/miniconda/bin:$PATH"
+
     source /opt/miniconda/etc/profile.d/conda.sh
 
     ##conda env
@@ -22,14 +57,15 @@ From:bruce.moran/default/variant_callers:manta-strelka2.centos7
     cd somatic_exome_n-of-1
     conda env create -n somatic_exome_n-of-1 -f environment.yaml
     conda clean -y -a
-    rm -rf somatic_exome_n-of-1
 
     ##compile snp-pileup
-    g++ -std=c++11 -I $CONDA_ENVS_PATH/somatic_exome_n-of-1/include $CONDA_ENVS_PATH/somatic_exome_n-of-1/lib/R/library/facets/extcode/snp-pileup.cpp -L$CONDA_ENVS_PATH/somatic_exome_n-of-1/include -lhts -Wl,-rpath=$CONDA_ENVS_PATH/somatic_exome_n-of-1/include -o $CONDA_ENVS_PATH/somatic_exome_n-of-1/lib/R/library/facets/extcode/snp-pileup
+    g++ -std=c++11 -I $CONDA_ENVS_PATH/somatic_exome_n-of-1/include $CONDA_ENVS_PATH/somatic_exome_n-of-1/lib/R/library/facets/extcode/snp-pileup.cpp -L$CONDA_ENVS_PATH/somatic_exome_n-of-1/include -lhts -Wl,-rpath=$CONDA_ENVS_PATH/somatic_exome_n-of-1/include  -Wl,-rpath=$CONDA_ENVS_PATH/somatic_exome_n-of-1/include/htslib -o $CONDA_ENVS_PATH/somatic_exome_n-of-1/lib/R/library/facets/extcode/snp-pileup
 
     ##linking
-    ln -sf /opt/miniconda/envs/somatic_exome_n-of-1/lib/*.s* /usr/lib64/
     ln -s $CONDA_ENVS_PATH/somatic_exome_n-of-1/lib/R/library/facets/extcode/snp-pileup /usr/local/bin/snp-pileup
 
     ##liftover
     chmod +x $CONDA_ENVS_PATH/somatic_exome_n-of-1/bin/liftOver
+
+    ##set env vars
+    echo -e "export PATH=/usr/local/bin:/usr/local/lancet:/opt/miniconda/envs/somatic_exome_n-of-1/bin:\$PATH\nexport LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/miniconda/envs/somatic_exome_n-of-1/lib:/opt/miniconda/envs/somatic_exome_n-of-1/lib64:/usr/local/lib:/usr/local/htslib:/usr/lib64:/bin\nexport PERL5LIB=/opt/miniconda/envs/somatic_exome_n-of-1/share" >> /.singularity.d/env/99-base.sh

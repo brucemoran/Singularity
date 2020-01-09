@@ -1,5 +1,5 @@
 Bootstrap:docker
-From:centos:centos7.4.1708
+From:centos:centos7.7.1908
 
 %post
     yum -y groups mark convert "Development Tools"
@@ -9,7 +9,9 @@ From:centos:centos7.4.1708
                    git \
                    wget \
                    which \
-                   emacs
+                   emacs \
+                   e2fsprogs \
+                   openssl-devel
 
     ##locales
-    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C LD_LIBRARY_PATH=/usr/lib64' >> $SINGULARITY_ENVIRONMENT
+    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib64' >> $SINGULARITY_ENVIRONMENT
