@@ -1,0 +1,23 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_conda
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate jupyter_rnaseq
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##conda env
+    cd /usr/local/
+    git clone https://github.com/brucemoran/singularity
+    cd singularity/conda_yamls
+    conda env create -n jupyter_rnaseq -f recipe.UCS_UCEC_RNAseq.analysis.novers.yaml
+    conda clean -y -a
+    rm -rf /usr/local/singularity
+
+    ##link out R
+    mkdir -p /usr/local/lib64/R/bin/
+    ln -s /opt/miniconda/envs/jupyter_rnaseq/bin/R /usr/local/lib64/R/bin/R

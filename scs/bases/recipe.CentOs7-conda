@@ -1,5 +1,5 @@
 Bootstrap:library
-From:bruce.moran/default/bases:centos7_python36
+From:bruce.moran/default/bases:centos7_python_36
 
 %environment
 

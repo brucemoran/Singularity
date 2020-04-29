@@ -1,0 +1,28 @@
+Bootstrap:docker
+From:centos:centos7.4.1708
+
+%help
+    Container for tools required to submit to EGA (European Genome-Phenome Archive)
+
+%environment
+    export JARPATH=/usr/local/jar
+    export PATH=$PATH:/home/bmoran/.aspera/connect/bin
+
+%post
+
+    ##java jdk 8, aspera dependencies
+    yum install -y java-1.8.0-openjdk libtool perl-core zlib-devel openssl mesa-libEGL glib2 wget unzip which
+
+    cd /usr/local
+    useradd bmoran
+
+    ##EGAcryptor, aspera
+    wget https://ega-archive.org/files/EgaCryptor.zip
+    unzip EgaCryptor.zip
+    mkdir /usr/local/jar
+    ln -s /usr/local/EGA-Cryptor*/*jar /usr/local/jar/
+
+    wget https://download.asperasoft.com/download/sw/connect/3.9.9/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
+    tar -xf ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
+    su - bmoran
+    sh /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh

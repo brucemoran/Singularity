@@ -1,0 +1,29 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_conda
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate nanopore_gDNA_CNA
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##conda env
+    cd /usr/local/
+    git clone https://github.com/brucemoran/nanopore_gDNA_CNA
+    conda env create -n nanopore_gDNA_CNA -f nanopore_gDNA_CNA/environment.yaml
+    conda clean -y -a
+    rm -rf /usr/local/nanopore_gDNA_CNA
+
+    ##link out R
+    mkdir -p /usr/local/lib64/R/bin/
+    ln -s /opt/miniconda/envs/nanopore_gDNA_CNA/bin/R /usr/local/lib64/R/bin/R
+
+    ##guppy
+    conda activate nanopore_gDNA_CNA
+    cd /opt/miniconda/envs/nanopore_gDNA_CNA/share
+    wget https://mirror.oxfordnanoportal.com/software/analysis/ont-guppy-cpu-3.4.4-1.el7.x86_64.rpm
+    yum install -y ont-guppy-cpu-3.4.4-1.el7.x86_64.rpm
+    

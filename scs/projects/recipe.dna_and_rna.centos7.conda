@@ -7,8 +7,11 @@ From:bruce.moran/default/bases:centos7_conda
     conda activate dna_and_rna
     export PATH="/opt/miniconda/envs/dna_and_rna/bin:$PATH"
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/htslib:/usr/lib64:/bin"
-    export PERL5LIB=/opt/miniconda/envs/dna_and_rna/share
-
+    export PERL5LIB=/opt/miniconda/envs/dna_and_rna/share:/opt/miniconda/envs/dna_and_rna/share/bioperl-1.6.924:/opt/miniconda/envs/dna_and_rna/share/ensembl/modules:/opt/miniconda/envs/dna_and_rna/share/ensembl-compara/modules:/opt/miniconda/envs/dna_and_rna/share/ensembl-variation/modules:/opt/miniconda/envs/dna_and_rna/share/ensembl-funcgen/modules
+    PERL_CPANM_HOME="/opt/miniconda/envs/dna_and_rna/share"
+    PERL_LOCAL_LIB_ROOT="/opt/miniconda/envs/dna_and_rna/share"
+    PERL_MB_OPT="--install_base /opt/miniconda/envs/dna_and_rna/share"
+    PERL_MM_OPT="INSTALL_BASE=/opt/miniconda/envs/dna_and_rna/share"
 %post
 
     source /opt/miniconda/etc/profile.d/conda.sh
@@ -18,9 +21,12 @@ From:bruce.moran/default/bases:centos7_conda
     cd dna_and_rna
     conda env create -p /opt/miniconda/envs/dna_and_rna -f environment.yaml
     conda clean -y -a
+    conda activate dna_and_rna
+    export PERL5LIB=/opt/miniconda/envs/dna_and_rna/share
 
-    ##bbmap adapters
-    cd /usr/local
-    wget https://downloads.sourceforge.net/project/bbmap/BBMap_38.36.tar.gz
-    tar -xf BBMap_38.36.tar.gz
-    rm BBMap_38.36.tar.gz
+    ##VEP (hooray)
+    cd /opt/miniconda/envs/dna_and_rna/share
+    git clone -b release-1-6-924 --depth 1 https://github.com/bioperl/bioperl-live.git
+    git clone https://github.com/Ensembl/ensembl-git-tools.git
+    export PATH=$PWD/ensembl-git-tools/bin:$PATH
+    git ensembl --clone api

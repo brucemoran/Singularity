@@ -5,9 +5,11 @@ From:bruce.moran/default/bases:centos7_r_3.6.0_jupyter
 
     #BiocManager to install sleuth dependencies, other packages (errors if left to own devices...)
     R --slave -e 'library("BiocManager"); BiocManager::install(c("rhdf5", "httr", "data.table", "matrixStats", "pheatmap", "shiny", "aggregation", "httpuv", "xtable", "sourcetools", "later", "promises", "tximport", "limma", "statmod", "DESeq2", "edgeR", "biomaRt", "Biobase", "readxl", "downloader", "gtools"), dependencies=c("Depends", "Imports", "LinkingTo"), update=FALSE, ask=FALSE, build_vignettes=FALSE, clean=TRUE)'
+    
+    rm -rf /usr/lib64/R/library/00LOCK*
 
     #sleuth, cowplot
-    R --slave -e 'library("devtools"); devtools::install_github("pachterlab/sleuth")'
+    R --slave -e 'library("devtools"); devtools::install_github("pachterlab/sleuth", build_vignettes=FALSE)'
 
     chmod -R 777 /usr/lib64/R/library
     for x in org.Hs.eg.db org.Mm.eg.db tximportData reactome.db; do
