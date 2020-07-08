@@ -1,0 +1,28 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%help
+    Container for gridss.2.9.3
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate gridss
+    PATH="/opt/miniconda/envs/gridss/bin":$PATH
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    wget -O environment.yaml "https://raw.githubusercontent.com/brucemoran/Singularity/master/conda_yamls/gridss.2.9.3.yaml"
+    conda env create -n gridss -f environment.yaml
+    conda clean -y -a
+
+    cd /opt/miniconda/envs/gridss/share
+    git clone https://github.com/PapenfussLab/gridss && cd gridss
+    git reset --hard 59d7733982018f615132049969f7631cd917cb99
+
+    conda activate gridss
+    PATH="/opt/miniconda/envs/gridss/bin":$PATH
+
+    ##org.hs.eg.db caused issues on conda, so do over R
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("org.Hs.eg.db"), dependencies=FALSE, update=FALSE, ask=FALSE)'

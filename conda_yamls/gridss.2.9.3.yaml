@@ -1,4 +1,4 @@
-name: gridss-purple-linx
+name: gridss
 channels:
   - conda-forge
   - r
@@ -7,23 +7,25 @@ channels:
   - defaults
 dependencies:
   - java-jdk=8.0.112
-  - r-base=3.6.1
-  - bwa=0.7.17
-  - samtools=1.9
-  - sambamba=0.7.1
-  - circos=0.69.8
-  - gridss=2.7.3
-  - hmftools-purple=2.36
-  - hmftools-cobalt=1.8
-  - hmftools-amber=3.2
-  - hmftools-linx=1.7
+  - bwa
+  - samtools
+  - sambamba
+  - circos
+  - gridss=2.9.3
+  - gxx_linux-64
+  - r-devtools
+  - r-gtools
+  - r-stringr
+  - r-dplyr
+  - r-plyr
+  - r-data.table
+  - r-ggplot2
   - r-tidyverse
   - r-assertthat
   - r-testthat
   - r-nmf
   - r-randomForest
   - r-stringdist
-  - r-stringr
   - r-argparser
   - r-r.cache
   - r-biocmanager
@@ -33,14 +35,16 @@ dependencies:
   - r-cowplot
   - r-magick
   - bioconductor-copynumber
+  - bioconductor-omiccircos
   - bioconductor-structuralvariantannotation
-  - bioconductor-variantannotation
+  - bioconductor-variantannotation=1.30.0
   - bioconductor-rtracklayer
   - bioconductor-bsgenome
   - bioconductor-rsamtools
+  - bioconductor-genomicranges
+  - bioconductor-genomicfeatures
   - bioconductor-biomaRt
   - bioconductor-gviz
-  - bioconductor-org.hs.eg.db
   - bioconductor-txdb.hsapiens.ucsc.hg19.knowngene
   - bioconductor-txdb.hsapiens.ucsc.hg38.knowngene
   - bioconductor-bsgenome.hsapiens.ucsc.hg19

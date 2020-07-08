@@ -1,4 +1,4 @@
-Bootstrap:library
+Bootstrap:shub
 From:bruce.moran/default/bases:centos7_conda
 
 %help
@@ -14,7 +14,7 @@ From:bruce.moran/default/bases:centos7_conda
 
 %post
 
-    wget -O environment.yaml https://raw.githubusercontent.com/brucemoran/Singularity/master/conda_yamls/gridss-purple-linx.1.2.0.yaml
+    wget -O environment.yaml "https://raw.githubusercontent.com/brucemoran/Singularity/master/conda_yamls/gridss-purple-linx.1.2.0.yaml"
 
     source /opt/miniconda/etc/profile.d/conda.sh
     conda env create -n gridss-purple-linx -f environment.yaml

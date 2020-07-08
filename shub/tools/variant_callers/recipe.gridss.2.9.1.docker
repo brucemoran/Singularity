@@ -1,0 +1,17 @@
+Bootstrap:docker
+From:gridss/gridss:2.9.1
+
+%help
+    Container for gridss
+
+%environment
+
+    PATH="/opt/gridss:$PATH"
+
+%post
+
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("BSgenome.Hsapiens.UCSC.hg19", "BSgenome.Hsapiens.UCSC.hg38", "devtools"), update=FALSE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
+    R --slave -e 'library("devtools"); install_bitbucket("djhshih/argparser")'
+
+    rm -rf /usr/local/lib/R/site-library/BSgenome.Hsapiens.UCSC.hg19/extdata
+    rm -rf /usr/local/lib/R/site-library/BSgenome.Hsapiens.UCSC.hg38/extdata

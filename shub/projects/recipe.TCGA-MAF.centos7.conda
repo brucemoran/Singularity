@@ -1,0 +1,30 @@
+Bootstrap:library
+From:bruce.moran/default/bases:centos7_conda
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    export GATK_LOCAL_JAR=/opt/miniconda/envs/tcga_maf/share/gatk4-4.1.7.0-0/gatk-package-4.1.7.0-local.jar
+    export PERL5LIB=/opt/miniconda/envs/tcga_maf/lib/site_perl/5.26.2
+    conda activate tcga_maf
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##conda env
+    cd /usr/local/
+    git clone https://github.com/brucemoran/TCGA_MAF_GeneList-vs-Random
+    cd TCGA_MAF_GeneList-vs-Random
+    conda env create -n tcga_maf -f environment.yaml
+    conda clean -y -a
+    cd ../
+    rm -rf TCGA_MAF_GeneList-vs-Random
+
+    ##link out R
+    mkdir -p /usr/local/lib64/R/bin/
+    ln -s /opt/miniconda/envs/tcga_maf/bin/R /usr/local/lib64/R/bin/R
+
+    ##maf2vcf
+    wget -O /opt/miniconda/envs/tcga_maf/bin/maf2vcf.pl https://raw.githubusercontent.com/mskcc/vcf2maf/master/maf2vcf.pl
+    chmod a+x /opt/miniconda/envs/tcga_maf/bin/maf2vcf.pl
