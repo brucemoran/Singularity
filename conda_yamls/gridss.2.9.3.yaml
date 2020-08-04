@@ -37,7 +37,7 @@ dependencies:
   - bioconductor-copynumber
   - bioconductor-omiccircos
   - bioconductor-structuralvariantannotation
-  - bioconductor-variantannotation=1.30.0
+  - bioconductor-variantannotation
   - bioconductor-rtracklayer
   - bioconductor-bsgenome
   - bioconductor-rsamtools

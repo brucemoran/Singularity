@@ -25,4 +25,4 @@ From:brucemoran/Singularity:centos7-conda
     PATH="/opt/miniconda/envs/gridss/bin":$PATH
 
     ##org.hs.eg.db caused issues on conda, so do over R
-    R --slave -e 'library("BiocManager"); BiocManager::install(c("org.Hs.eg.db"), dependencies=FALSE, update=FALSE, ask=FALSE)'
+    R --slave -e 'BiocManager::install(c("org.Hs.eg.db", "circlize"), dependencies = FALSE, update = FALSE, ask = FALSE); devtools::install_github("brucemoran/somenone")'
