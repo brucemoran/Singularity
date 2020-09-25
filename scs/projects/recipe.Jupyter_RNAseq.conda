@@ -25,3 +25,6 @@ From:bruce.moran/default/bases:centos7_conda
     ##preMSIm
     cd /opt/miniconda/envs/jupyter_rnaseq/lib/R/library
     /opt/miniconda/envs/jupyter_rnaseq/bin/R --slave -e '.libPaths("/opt/miniconda/envs/jupyter_rnaseq/lib/R/library"); library("devtools"); devtools::install_github("WangX-Lab/PreMSIm", upgrade="never", force=TRUE)'
+
+    ##ESTIMATE
+    /opt/miniconda/envs/jupyter_rnaseq/bin/R --slave -e '.libPaths("/opt/miniconda/envs/jupyter_rnaseq/lib/R/library"); library("utils"); rforge <- "http://r-forge.r-project.org"; install.packages("estimate", repos=rforge, dependencies=TRUE)'

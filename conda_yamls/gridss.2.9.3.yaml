@@ -13,7 +13,11 @@ dependencies:
   - circos
   - gridss=2.9.3
   - gxx_linux-64
+  - gfortran_linux-64
+  - ldc=1.20
+  - r-base=3.6.0
   - r-devtools
+  - r-circlize
   - r-gtools
   - r-stringr
   - r-dplyr
@@ -34,9 +38,9 @@ dependencies:
   - r-rsqlite
   - r-cowplot
   - r-magick
+  - bioconductor-complexheatmap
   - bioconductor-copynumber
   - bioconductor-omiccircos
-  - bioconductor-structuralvariantannotation
   - bioconductor-variantannotation
   - bioconductor-rtracklayer
   - bioconductor-bsgenome

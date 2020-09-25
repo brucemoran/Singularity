@@ -1,0 +1,29 @@
+Bootstrap:docker
+From:centos:centos7.7.1908
+
+%environment
+    export "PATH=$PATH:/usr/local/gsutil"
+
+%post
+    yum -y groups mark convert "Development Tools"
+    yum -y groups mark install "Development Tools"
+    yum -y groupinstall "Development Tools"
+    yum -y install epel-release \
+                   wget \
+                   which \
+                   emacs \
+                   openssl-devel \
+                   python3-devel \
+                   python3-setuptools \
+                   libffi-devel \
+                   python3-pip \
+                   gcc \
+                   redhat-rpm-config
+
+    cd /usr/local
+    pip3 install gsutil
+
+    ##https://cloud.google.com/storage/docs/gsutil/addlhelp/CRC32CandInstallingcrcmod#centos-rhel-and-fedora
+
+    pip3 uninstall -y crcmod
+    pip3 install --no-cache-dir -U crcmod
