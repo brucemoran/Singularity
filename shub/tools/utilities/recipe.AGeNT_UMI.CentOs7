@@ -1,0 +1,72 @@
+Bootstrap:docker
+From:centos:centos7.4.1708
+
+%post
+    yum -y groups mark install "Development Tools"
+    yum -y groups mark convert "Development Tools"
+    yum -y groupinstall "Development Tools"
+    yum -y install epel-release \
+                   git \
+                   wget \
+                   which \
+                   emacs \
+                   python3
+
+    ##locales
+    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C LD_LIBRARY_PATH=/usr/lib64' >> $SINGULARITY_ENVIRONMENT
+
+    ##JAVA 1.8
+    yum -y install java-1.8.0-openjdk-devel.x86_64
+
+    ##update alternatives
+    update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.*.x86_64/bin/java" 1
+
+    ##GDrive bs
+    cd /usr/share
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    python get-pip.py
+    pip install "requests"
+    pip install "tqdm"
+    git clone https://github.com/chentinghao/download_google_drive.git
+    python ./download_google_drive/download_gdrive.py 1RncKj8pjYcSK6y76OEFjioh8e2yiLhJb AGeNT_2.0.2.zip
+
+    ##AGeNT software hosted in GDrive (thanks for login req. AGILENT!)
+    ##please feel free to ask me to take this down at any stage
+    unzip AGeNT_2.0.2.zip
+
+    yum install -y autoconf \
+                   automake \
+                   make \
+                   gcc \
+                   perl-Data-Dumper \
+                   zlib-devel \
+                   bzip2 \
+                   bzip2-devel \
+                   xz-devel \
+                   curl-devel \
+                   openssl-devel \
+                   ncurses-devel
+
+    ##HTSlib
+    cd /usr/local
+    git clone https://github.com/samtools/htslib
+    cd htslib
+    git reset --hard 1832d3a1b75133e55fb6abffc3f50f8a6ed5ceae
+    autoheader
+    autoconf -Wno-syntax
+    ./configure
+    make
+    make install
+
+    ##samtools
+    git clone https://github.com/samtools/samtools
+    cd samtools
+    git reset --hard b24d8121509cdfc745d73dd3b90da5571a6d4db9
+    autoheader
+    autoconf -Wno-syntax
+    ./configure
+    make
+    make install
+
+    ##add to PATH
+    echo 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.201.b09-2.el7_6.x86_64 PATH=$PATH:$JAVA_HOME/bin:/user/share/agent/lib:/usr/local/samtools LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib' >> $SINGULARITY_ENVIRONMENT
