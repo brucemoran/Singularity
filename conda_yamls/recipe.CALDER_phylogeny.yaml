@@ -1,0 +1,13 @@
+name: calder
+channels:
+  - bioconda
+dependencies:
+  - java-jdk
+  - glpk
+  - snakemake
+  - pyclone
+  - parallel
+  - bioconductor-timescape
+  - networkx
+  - pandas
+  - pydot

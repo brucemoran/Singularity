@@ -23,6 +23,14 @@ From:bruce.moran/default/variant_callers:manta-strelka2-lancet.centos7
     conda env create -n somatic_n-of-1 -f environment.yaml
     conda clean -y -a
 
+    ##new commit of CPSR
+    cd /usr/local
+    git clone https://github.com/sigven/cpsr
+    cd cpsr
+    git reset --hard c9a6c48daaa839ba1a04ecc21c5764800e0b078d
+    rm /opt/miniconda/envs/somatic_n-of-1/bin/cpsr.py
+    cp cpsr.py /opt/miniconda/envs/somatic_n-of-1/bin/cpsr.py
+
     ##liftover
     chmod +x $CONDA_ENVS_PATH/somatic_n-of-1/bin/liftOver
 

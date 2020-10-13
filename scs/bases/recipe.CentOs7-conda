@@ -1,4 +1,4 @@
-Bootstrap:library
+Bootstrap:shub
 From:bruce.moran/default/bases:centos7_python_36
 
 %environment

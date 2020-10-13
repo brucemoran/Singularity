@@ -1,0 +1,11 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7_python36
+
+%help
+    Container for Chimaera
+
+%post
+
+  ##
+  cd /usr/share
+  pip install git+https://github.com/drugilsberg/chimaera.git
