@@ -1,0 +1,15 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%help
+    Container for PyClone
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate pyclone
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda create -n pyclone -c bioconda -c conda-forge pyclone

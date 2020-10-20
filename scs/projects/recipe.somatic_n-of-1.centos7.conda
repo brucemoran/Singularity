@@ -46,7 +46,7 @@ From:bruce.moran/default/variant_callers:manta-strelka2-lancet.centos7
     export PATH=$PATH:/opt/miniconda/envs/somatic_n-of-1/bin
 
     ##install somenone, StructuralVariantAnnotation R library
-    /opt/miniconda/envs/somatic_n-of-1/bin/R --slave -e 'options(unzip = "internal"); devtools::install_github("brucemoran/somenone"); devtools::install_github("brucemoran/StructuralVariantAnnotation", ref="4443ab6865cb568e46242c1f084247f6cb7694d3")'
+    /opt/miniconda/envs/somatic_n-of-1/bin/R --slave -e 'options(unzip = "internal"); devtools::install_github("brucemoran/somenone"); devtools::install_github("brucemoran/StructuralVariantAnnotation", ref="4443ab6865cb568e46242c1f084247f6cb7694d3"); devtools::install_github("caravagn/evoverse")'
 
     ##mv bbmap adapters to plain-named file
     cp /opt/miniconda/envs/somatic_n-of-1/opt/bbmap-*/resources/adapters.fa /opt/miniconda/envs/somatic_n-of-1/opt/bbmap-adapters.fa

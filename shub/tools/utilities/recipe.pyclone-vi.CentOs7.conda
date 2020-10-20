@@ -1,0 +1,19 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%help
+    Container for PyClone-vi
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate pyclone-vi
+
+%post
+
+    cd /opt
+    git clone https://github.com/Roth-Lab/pyclone-vi
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda create -n pyclone-vi --file ./pyclone-vi/requirements.txt --yes
+    cd /opt/pyclone-vi
+    /opt/miniconda/envs/pyclone-vi/bin/pip install .
