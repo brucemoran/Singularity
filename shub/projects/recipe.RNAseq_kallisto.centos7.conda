@@ -1,0 +1,33 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate RNAseq_kallisto
+    export PATH="/usr/local/bin:/opt/miniconda/envs/RNAseq_kallisto/bin:$PATH"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/miniconda/envs/RNAseq_kallisto/lib:/opt/miniconda/envs/RNAseq_kallisto/lib64"
+    export PERL5LIB="/opt/miniconda/envs/RNAseq_kallisto/share"
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##conda env
+    git clone -b dev https://github.com/brucemoran/RNAseq_kallisto
+    cd RNAseq_kallisto
+
+    conda env create -n RNAseq_kallisto -f environment.yaml
+    conda clean -y -a
+
+    export LD_LIBRARY_PATH=/opt/miniconda/envs/RNAseq_kallisto/lib:/opt/miniconda/envs/RNAseq_kallisto/lib64::/opt/miniconda/envs/RNAseq_kallisto/libexec/gcc:$LD_LIBRARY_PATH
+
+    ##install RNAseqR
+    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'devtools::install_github("brucemoran/RNAseqR")'
+
+    conda activate RNAseq_kallisto
+
+    ##install working stringi
+    cd /opt/miniconda/envs/RNAseq_kallisto/lib/R/library
+    wget https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.4.6.tar.gz
+    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'install.packages("/opt/miniconda/envs/RNAseq_kallisto/lib/R/library/stringi_1.4.6.tar.gz", repos = NULL, type = "source", dependencies = TRUE, INSTALL_opts = "--no-lock", configure.args="--disable-pkg-config")'
