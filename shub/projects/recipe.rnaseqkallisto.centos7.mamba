@@ -1,0 +1,56 @@
+Bootstrap:docker
+From:centos:centos7.4.1708
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate RNAseq_kallisto
+    export PATH="/usr/local/bin:/opt/miniconda/envs/RNAseq_kallisto/bin:$PATH"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/miniconda/envs/RNAseq_kallisto/lib:/opt/miniconda/envs/RNAseq_kallisto/lib64"
+    export PERL5LIB="/opt/miniconda/envs/RNAseq_kallisto/share"
+    export R_LIBS="/opt/miniconda/envs/RNAseq_kallisto/lib/R/library"
+
+%post
+    yum -y groups mark install "Development Tools"
+    yum -y groups mark convert "Development Tools"
+    yum -y groupinstall "Development Tools"
+    yum -y install epel-release \
+                   git \
+                   wget \
+                   which \
+                   emacs
+
+    ##locales
+    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C LD_LIBRARY_PATH=/usr/lib64' >> $SINGULARITY_ENVIRONMENT
+
+    ##conda
+    cd /opt
+    wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.8.2-Linux-x86_64.sh -O miniconda.sh
+    bash miniconda.sh -b -t -p ./miniconda
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda build purge
+    conda install mamba -y -c conda-forge
+    conda clean -y -a
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##conda env
+    git clone https://github.com/brucemoran/RNAseq_kallisto
+    cd RNAseq_kallisto
+
+    mamba env create -n RNAseq_kallisto -f environment.yaml
+    mamba clean -y -a
+
+    export LD_LIBRARY_PATH=/opt/miniconda/envs/RNAseq_kallisto/lib:/opt/miniconda/envs/RNAseq_kallisto/lib64::/opt/miniconda/envs/RNAseq_kallisto/libexec/gcc:$LD_LIBRARY_PATH
+
+    ##install RNAseqR
+    conda activate RNAseq_kallisto
+
+    export R_LIBS="/opt/miniconda/envs/RNAseq_kallisto/lib/R/library"
+
+    ##install working stringi
+    cd /opt/miniconda/envs/RNAseq_kallisto/lib/R/library
+    wget https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.4.6.tar.gz
+    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'install.packages("/opt/miniconda/envs/RNAseq_kallisto/lib/R/library/stringi_1.4.6.tar.gz", repos = NULL, type = "source", dependencies = TRUE, INSTALL_opts = "--no-lock", configure.args="--disable-pkg-config")'
+
+    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'remotes::install_github("brucemoran/RNAseqR", ref = "master")'
