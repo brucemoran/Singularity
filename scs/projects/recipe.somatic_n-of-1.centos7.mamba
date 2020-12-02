@@ -14,14 +14,16 @@ From:bruce.moran/default/variant_callers:manta-strelka2-lancet.centos7
     export CONDA_PKGS_PATH=/opt/miniconda/pkgs
     export CONDA_ENVS_PATH=/opt/miniconda/envs
     export PATH="/opt/miniconda/bin:$PATH"
+    conda install mamba -y -c conda-forge
 
     source /opt/miniconda/etc/profile.d/conda.sh
 
     ##conda env
     git clone https://github.com/brucemoran/somatic_n-of-1
     cd somatic_n-of-1
-    conda env create -n somatic_n-of-1 -f environment.yaml
-    conda clean -y -a
+
+    mamba env create -n somatic_n-of-1 -f environment.yaml
+    mamba clean -y -a
 
     ##new commit of CPSR
     cd /usr/local

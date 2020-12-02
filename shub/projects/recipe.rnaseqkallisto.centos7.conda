@@ -11,7 +11,7 @@ From:brucemoran/Singularity:centos7-conda
     export R_LIBS="/opt/miniconda/envs/RNAseq_kallisto/lib/R/library"
 
 %post
-
+  
     source /opt/miniconda/etc/profile.d/conda.sh
 
     ##conda env
