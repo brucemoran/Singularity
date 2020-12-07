@@ -13,3 +13,4 @@ dependencies:
   - numba
   - colorlover
   - gcc_linux-64
+  - plotly
