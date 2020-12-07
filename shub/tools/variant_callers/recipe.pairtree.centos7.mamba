@@ -5,8 +5,9 @@ From:centos:centos7.4.1708
 
     source /opt/miniconda/etc/profile.d/conda.sh
     conda activate pairtree
-    export PATH="/usr/local/bin:/opt/miniconda/envs/pairtree/bin:$PATH"
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/miniconda/envs/pairtree/lib:/opt/miniconda/envs/pairtree/lib64"
+    export PATH="/opt/miniconda/envs/pairtree/bin:/opt/miniconda/envs/pairtree/share/pairtree/bin:$PATH"
+    export PYTHONPATH=/opt/miniconda/envs/pairtree/share/pairtree/lib:$PYTHONPATH
+    export LD_LIBRARY_PATH="/opt/miniconda/envs/pairtree/lib:/opt/miniconda/envs/pairtree/lib64:$LD_LIBRARY_PATH"
 
 %post
     yum -y groups mark install "Development Tools"
@@ -39,4 +40,17 @@ From:centos:centos7.4.1708
     mamba env create -n pairtree -f pairtree_c8f1b96.yaml
     mamba clean -y -a
 
-    export LD_LIBRARY_PATH=/opt/miniconda/envs/pairtree/lib:/opt/miniconda/envs/pairtree/lib64::/opt/miniconda/envs/pairtree/libexec/gcc:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/opt/miniconda/envs/pairtree/lib:/opt/miniconda/envs/pairtree/lib64:/opt/miniconda/envs/pairtree/libexec/gcc:$LD_LIBRARY_PATH
+
+    ##install RNAseqR
+    conda activate pairtree
+
+    cd /opt/miniconda/envs/pairtree/share
+    git clone https://github.com/jwintersinger/pairtree
+    cd pairtree/lib
+    git clone https://github.com/jwintersinger/projectppm
+    cd projectppm
+    ln -s /opt/miniconda/envs/pairtree/bin/x86_64-conda_cos6-linux-gnu-gcc /opt/miniconda/envs/pairtree/bin/gcc
+    echo $(which gcc)
+
+    bash make.sh
