@@ -1,0 +1,15 @@
+name: pairtree
+channels:
+  - conda-forge
+  - r
+  - bioconda
+  - anaconda
+  - defaults
+dependencies:
+  - numpy
+  - scipy
+  - scikit-learn
+  - tqdm
+  - numba
+  - colorlover
+  - gcc_linux-64
