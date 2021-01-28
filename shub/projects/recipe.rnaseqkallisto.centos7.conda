@@ -11,7 +11,7 @@ From:brucemoran/Singularity:centos7-conda
     export R_LIBS="/opt/miniconda/envs/RNAseq_kallisto/lib/R/library"
 
 %post
-  
+
     source /opt/miniconda/etc/profile.d/conda.sh
 
     ##conda env
@@ -33,4 +33,4 @@ From:brucemoran/Singularity:centos7-conda
     wget https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.4.6.tar.gz
     /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'install.packages("/opt/miniconda/envs/RNAseq_kallisto/lib/R/library/stringi_1.4.6.tar.gz", repos = NULL, type = "source", dependencies = TRUE, INSTALL_opts = "--no-lock", configure.args="--disable-pkg-config")'
 
-    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'remotes::install_github("brucemoran/RNAseqR", ref = "master")'
+    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'remotes::install_github("brucemoran/RNAseqon", ref = "master")'

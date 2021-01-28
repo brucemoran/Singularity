@@ -53,4 +53,4 @@ From:centos:centos7.4.1708
     wget https://cran.r-project.org/src/contrib/Archive/stringi/stringi_1.4.6.tar.gz
     /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'install.packages("/opt/miniconda/envs/RNAseq_kallisto/lib/R/library/stringi_1.4.6.tar.gz", repos = NULL, type = "source", dependencies = TRUE, INSTALL_opts = "--no-lock", configure.args="--disable-pkg-config")'
 
-    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'remotes::install_github("brucemoran/RNAseqR", ref = "dev")'
+    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'remotes::install_github("brucemoran/RNAseqon", ref = "dev")'
