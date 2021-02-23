@@ -5,8 +5,8 @@ From:centos:centos7.4.1708
     Container for tools required to submit to EGA (European Genome-Phenome Archive)
 
 %environment
-    export JARPATH=$JARPATH:/usr/local/jar
-    export PATH=$PATH:/home/bmoran/.aspera/connect/bin
+
+    export PATH="/home/bmoran/.aspera/connect/bin:$PATH"
 
 %post
 
@@ -23,16 +23,16 @@ From:centos:centos7.4.1708
                    which
 
     cd /usr/local
-    useradd madskillz
+    useradd bmoran
 
     ##EGAcryptor
     wget https://ega-archive.org/files/EgaCryptor.zip
     unzip EgaCryptor.zip
     mkdir /usr/local/jar
-    ln -s /usr/local/EGA-Cryptor*/*jar /usr/local/jar/
+    ln -s /usr/local/EGA-Cryptor*/*jar /usr/local/jar/EGAcryptor.jar
 
     ##aspera
     wget https://download.asperasoft.com/download/sw/connect/3.9.9/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
     tar -xf ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
-    su - madskillz
+    su - bmoran
     sh /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
