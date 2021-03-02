@@ -73,6 +73,7 @@ dependencies:
   - r-poiclaclu
   - r-promises
   - r-readxl
+  - r-remotes
   - r-rngtools
   - r-registry
   - r-sequenza
