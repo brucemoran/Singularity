@@ -1,0 +1,27 @@
+name: aracne-ap_viper
+channels:
+  - conda-forge
+  - r
+  - bioconda
+  - anaconda
+  - defaults
+dependencies:
+  - java-jdk=8.0.112
+  - ant
+  - r-base=3.6.0
+  - r-biocmanager
+  - r-devtools
+  - r-ggplot2
+  - r-gtools
+  - r-httr
+  - r-knitr
+  - r-mixtools
+  - r-remotes
+  - r-reshape2
+  - r-rmarkdown
+  - r-tinytex
+  - r-tidyverse
+  - bioconductor-aracne.networks
+  - bioconductor-biobase
+  - bioconductor-biomaRt
+  - bioconductor-viper
