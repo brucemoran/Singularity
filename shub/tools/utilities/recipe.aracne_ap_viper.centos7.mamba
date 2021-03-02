@@ -1,0 +1,27 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%environment
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+    conda activate aracne-ap_viper
+
+%post
+
+    source /opt/miniconda/etc/profile.d/conda.sh
+
+    ##clone YAML
+    git clone https://github.com/brucemoran/Singularity
+
+    conda install mamba -y -c conda-forge
+    mamba env create -n aracne-ap_viper -f Singularity/conda_yamls/aracne-ap_viper.yaml
+    mamba clean -y -a
+
+    ##create executable
+    ##NB allows Xmx for resource allocation only
+    chmod a+x /opt/miniconda/envs/aracne-ap_viper/bin/aracne.jar
+    echo -e "#! /bin/bash\njavamem=""\nif [[ \$1 =~ "-Xmx" ]];then javamem=\$1; shift 1; fi\nexec java \$javamem -jar /opt/miniconda/envs/aracne-ap_viper/bin/aracne.jar "\$@"" > /opt/miniconda/envs/aracne-ap_viper/bin/aracne-ap
+    chmod a+x /opt/miniconda/envs/aracne-ap_viper/bin/aracne-ap
+
+    ##install RNAseqon
+    /opt/miniconda/envs/aracne-ap_viper/bin/R --slave -e 'options(unzip = "internal"); remotes::install_github("brucemoran/RNAseqon"); tinytex::install_tinytex()'
