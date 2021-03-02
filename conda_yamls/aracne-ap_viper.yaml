@@ -4,10 +4,11 @@ channels:
   - r
   - bioconda
   - anaconda
+  - ohsu-comp-bio
   - defaults
 dependencies:
   - java-jdk=8.0.112
-  - ant
+  - aracne-ap
   - r-base=3.6.0
   - r-biocmanager
   - r-devtools
