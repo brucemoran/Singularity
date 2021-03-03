@@ -9,7 +9,7 @@ channels:
 dependencies:
   - java-jdk=8.0.112
   - aracne-ap
-  - x86_64-conda_cos6-linux-gnu
+  - ld_impl_linux-6
   - r-base=3.6.0
   - r-biocmanager
   - r-devtools
