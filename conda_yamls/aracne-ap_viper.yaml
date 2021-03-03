@@ -10,7 +10,7 @@ dependencies:
   - java-jdk=8.0.112
   - aracne-ap
   - ld_impl_linux-64
-  - r-base=3.6.0
+  - r-base
   - r-biocmanager
   - r-devtools
   - r-ggplot2
