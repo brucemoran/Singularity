@@ -25,7 +25,7 @@ From:centos:centos7.4.1708
     ##conda
     cd /opt
     wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.8.2-Linux-x86_64.sh -O miniconda.sh
-    bash miniconda.sh -b -t -p ./miniconda
+    bash miniconda.sh -b -t -p /opt/miniconda
     source /opt/miniconda/etc/profile.d/conda.sh
     conda build purge
     conda install mamba -y -c conda-forge
