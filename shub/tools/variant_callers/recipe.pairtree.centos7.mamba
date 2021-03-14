@@ -1,48 +1,24 @@
-Bootstrap:docker
-From:centos:centos7.4.1708
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
 
 %environment
 
     source /opt/miniconda/etc/profile.d/conda.sh
     conda activate pairtree
-    export PATH="/opt/miniconda/envs/pairtree/bin:/opt/miniconda/envs/pairtree/share/pairtree/bin:$PATH"
-    export PYTHONPATH=/opt/miniconda/envs/pairtree/share/pairtree/lib:$PYTHONPATH
-    export LD_LIBRARY_PATH="/opt/miniconda/envs/pairtree/lib:/opt/miniconda/envs/pairtree/lib64:$LD_LIBRARY_PATH"
 
 %post
-    yum -y groups mark install "Development Tools"
-    yum -y groups mark convert "Development Tools"
-    yum -y groupinstall "Development Tools"
-    yum -y install epel-release \
-                   git \
-                   wget \
-                   which \
-                   emacs
 
-    ##locales
-    echo 'export LANG=en_US.UTF-8 LANGUAGE=C LC_ALL=C LC_CTYPE=C LC_COLLATE=C  LC_TIME=C LC_MONETARY=C LC_PAPER=C LC_MEASUREMENT=C LD_LIBRARY_PATH=/usr/lib64' >> $SINGULARITY_ENVIRONMENT
-
-    ##conda
-    cd /opt
-    wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.8.2-Linux-x86_64.sh -O miniconda.sh
-    bash miniconda.sh -b -t -p /opt/miniconda
     source /opt/miniconda/etc/profile.d/conda.sh
-    conda build purge
     conda install mamba -y -c conda-forge
-    conda clean -y -a
-
-    source /opt/miniconda/etc/profile.d/conda.sh
 
     ##conda env
+    cd /opt/
     git clone https://github.com/brucemoran/Singularity
-    cp Singularity/conda_yamls/pairtree_c8f1b96.yaml ./
-
-    mamba env create -n pairtree -f pairtree_c8f1b96.yaml
+    mamba env create -n pairtree -f Singularity/conda_yamls/pairtree_c8f1b96.yaml
     mamba clean -y -a
 
     export LD_LIBRARY_PATH=/opt/miniconda/envs/pairtree/lib:/opt/miniconda/envs/pairtree/lib64:/opt/miniconda/envs/pairtree/libexec/gcc:$LD_LIBRARY_PATH
 
-    ##install RNAseqR
     conda activate pairtree
 
     cd /opt/miniconda/envs/pairtree/share
