@@ -10,7 +10,6 @@ From:brucemoran/Singularity:centos7-conda
 %post
 
     source /opt/miniconda/etc/profile.d/conda.sh
-    conda update -n base -c defaults conda
     conda install mamba -y -c conda-forge
 
     ##conda env
@@ -20,6 +19,9 @@ From:brucemoran/Singularity:centos7-conda
     mamba clean -y -a
 
     export LD_LIBRARY_PATH=/opt/miniconda/envs/pairtree/lib:/opt/miniconda/envs/pairtree/lib64:/opt/miniconda/envs/pairtree/libexec/gcc:$LD_LIBRARY_PATH
+
+    ls -l /opt/miniconda/envs/pairtree/bin/
+
     conda activate pairtree
 
     cd /opt/miniconda/envs/pairtree/share
@@ -31,6 +33,3 @@ From:brucemoran/Singularity:centos7-conda
     echo $(which gcc)
 
     bash make.sh
-
-    ##install somenone
-    /opt/miniconda/envs/pairtree/bin/R --slave -e 'options(unzip = "internal"); devtools::install_github("brucemoran/somenone", ref = "dev")'
