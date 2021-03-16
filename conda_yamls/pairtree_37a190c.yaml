@@ -13,7 +13,4 @@ dependencies:
   - numba
   - colorlover
   - gcc_linux-64
-  - gfortran_linux-64
   - plotly
-  - r-base
-  - r-tidyverse
