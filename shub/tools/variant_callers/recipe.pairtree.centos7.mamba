@@ -15,7 +15,7 @@ From:brucemoran/Singularity:centos7-conda
     ##conda env
     cd /opt/
     git clone https://github.com/brucemoran/Singularity
-    mamba env create -n pairtree -f Singularity/conda_yamls/pairtree_c8f1b96.yaml
+    mamba env create -n pairtree -f Singularity/conda_yamls/pairtree_37a190c.yaml
     mamba clean -y -a
 
     export LD_LIBRARY_PATH=/opt/miniconda/envs/pairtree/lib:/opt/miniconda/envs/pairtree/lib64:/opt/miniconda/envs/pairtree/libexec/gcc:$LD_LIBRARY_PATH
@@ -31,3 +31,6 @@ From:brucemoran/Singularity:centos7-conda
     echo $(which gcc)
 
     bash make.sh
+
+    ##install somenone
+    /opt/miniconda/envs/pairtree/bin/R --slave -e 'options(unzip = "internal"); devtools::install_github("brucemoran/somenone", ref = "dev")'
