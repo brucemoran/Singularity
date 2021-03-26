@@ -33,3 +33,5 @@ From:brucemoran/Singularity:centos7-conda
     echo $(which gcc)
 
     bash make.sh
+
+    chmod a+x /opt/miniconda/envs/pairtree/share/pairtree/util/remove_high_vaf.py
