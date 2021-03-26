@@ -5,7 +5,7 @@ From:brucemoran/Singularity:centos7-conda
 
     source /opt/miniconda/etc/profile.d/conda.sh
     conda activate pairtree
-    export PATH="/opt/miniconda/envs/pairtree/share/pairtree/bin:$PATH"
+    export PATH="/opt/miniconda/envs/pairtree/share/pairtree/bin:/opt/miniconda/envs/pairtree/share/pairtree/util:$PATH"
 
 %post
 
