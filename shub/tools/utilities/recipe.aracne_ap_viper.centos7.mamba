@@ -5,6 +5,7 @@ From:brucemoran/Singularity:centos7-conda
 
     source /opt/miniconda/etc/profile.d/conda.sh
     conda activate aracne-ap_viper
+    export R_LIBS="/opt/miniconda/envs/aracne-ap_viper/lib/R/library"
 
 %post
 
@@ -24,4 +25,7 @@ From:brucemoran/Singularity:centos7-conda
     chmod a+x /opt/miniconda/envs/aracne-ap_viper/bin/aracne-ap
 
     ##install RNAseqon
-    /opt/miniconda/envs/aracne-ap_viper/bin/R --slave -e 'options(unzip = "internal"); remotes::install_github("brucemoran/RNAseqon"); tinytex::install_tinytex()'
+    /opt/miniconda/envs/aracne-ap_viper/bin/R --slave -e 'options(unzip = "internal"); remotes::install_github("brucemoran/RNAseqon", ref = "dev")'
+
+    ##https://github.com/conda/conda/issues/6600
+    chmod -R u+x /opt/miniconda/envs/aracne-ap_viper/bin

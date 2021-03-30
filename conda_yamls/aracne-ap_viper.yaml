@@ -27,3 +27,4 @@ dependencies:
   - bioconductor-biobase
   - bioconductor-biomaRt
   - bioconductor-viper
+  - bioconductor-fgsea
