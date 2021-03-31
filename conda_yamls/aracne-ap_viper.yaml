@@ -18,6 +18,7 @@ dependencies:
   - r-httr
   - r-knitr
   - r-mixtools
+  - r-msigdbr
   - r-remotes
   - r-reshape2
   - r-rmarkdown
