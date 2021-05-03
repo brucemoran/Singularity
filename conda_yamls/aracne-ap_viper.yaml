@@ -27,5 +27,6 @@ dependencies:
   - bioconductor-aracne.networks
   - bioconductor-biobase
   - bioconductor-biomaRt
+  - bioconductor-gsva
   - bioconductor-viper
   - bioconductor-fgsea
