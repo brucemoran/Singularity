@@ -19,5 +19,5 @@ From:bruce.moran/default/bases:centos7_conda
     conda env create -n RNAseq_kallisto -f environment.yaml
     conda clean -y -a
 
-    ##install RNAseqR
-    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'options(unzip = "internal"); remotes::install_github("brucemoran/RNAseqR")'
+    ##install RNAseqon
+    /opt/miniconda/envs/RNAseq_kallisto/bin/R --slave -e 'options(unzip = "internal"); remotes::install_github("brucemoran/RNAseqon")'

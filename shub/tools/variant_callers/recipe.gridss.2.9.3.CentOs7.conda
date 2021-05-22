@@ -2,19 +2,19 @@ Bootstrap:shub
 From:brucemoran/Singularity:centos7-conda
 
 %help
-    Container for gridss.2.9.3
+    Container for pairtree c8f1b96
 
 %environment
 
     source /opt/miniconda/etc/profile.d/conda.sh
-    conda activate gridss
-    PATH="/opt/miniconda/envs/gridss/bin":$PATH
+    conda activate pairtree
+    PATH="/opt/miniconda/envs/pairtree/bin":$PATH
 
 %post
 
     source /opt/miniconda/etc/profile.d/conda.sh
-    wget -O environment.yaml "https://raw.githubusercontent.com/brucemoran/Singularity/master/conda_yamls/gridss.2.9.3.yaml"
-    conda env create -n gridss -f environment.yaml
+    wget -O environment.yaml "https://raw.githubusercontent.com/brucemoran/Singularity/master/conda_yamls/pairtree_c8f1b96.yaml"
+    conda env create -n pairtree -f pairtree_c8f1b96.yaml
     conda clean -y -a
 
     cd /opt/miniconda/envs/gridss/share

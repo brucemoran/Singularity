@@ -8,7 +8,7 @@ From:bruce.moran/default/variant_callers:manta-strelka2-lancet.centos7
 
 %post
     ##conda
-    wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.8.2-Linux-x86_64.sh -O miniconda.sh
+    wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.9.2-Linux-x86_64.sh -O miniconda.sh
     bash ./miniconda.sh -b -p /opt/miniconda
     rm -rf miniconda.sh
     export CONDA_PKGS_PATH=/opt/miniconda/pkgs
@@ -19,26 +19,14 @@ From:bruce.moran/default/variant_callers:manta-strelka2-lancet.centos7
     source /opt/miniconda/etc/profile.d/conda.sh
 
     ##conda env
-    git clone https://github.com/brucemoran/somatic_n-of-1
+    git clone https://github.com/brucemoran/somatic_n-of-1 --branch dev
     cd somatic_n-of-1
 
     mamba env create -n somatic_n-of-1 -f environment.yaml
     mamba clean -y -a
 
-    ##new commit of CPSR
-    cd /usr/local
-    git clone https://github.com/sigven/cpsr
-    cd cpsr
-    git reset --hard c9a6c48daaa839ba1a04ecc21c5764800e0b078d
-    rm /opt/miniconda/envs/somatic_n-of-1/bin/cpsr.py
-    cp cpsr.py /opt/miniconda/envs/somatic_n-of-1/bin/cpsr.py
-
     ##liftover
     chmod +x $CONDA_ENVS_PATH/somatic_n-of-1/bin/liftOver
-
-    ##build loftee
-    cd /opt/miniconda/envs/somatic_n-of-1/share/loftee
-    git clone https://github.com/konradjk/loftee
 
     ##set env vars
     echo -e "export PATH=/usr/local/lancet:/usr/local/bin:/opt/miniconda/envs/somatic_n-of-1/bin:\$PATH\nexport LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/opt/miniconda/envs/somatic_n-of-1/lib:/opt/miniconda/envs/somatic_n-of-1/lib64:/usr/local/lib:/usr/local/htslib:/usr/lib64:/bin\nexport PERL5LIB=/opt/miniconda/envs/somatic_n-of-1/share" >> /.singularity.d/env/99-base.sh
@@ -47,8 +35,8 @@ From:bruce.moran/default/variant_callers:manta-strelka2-lancet.centos7
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/miniconda/envs/somatic_n-of-1/libexec/gcc
     export PATH=$PATH:/opt/miniconda/envs/somatic_n-of-1/bin
 
-    ##install somenone, StructuralVariantAnnotation R library
-    /opt/miniconda/envs/somatic_n-of-1/bin/R --slave -e 'options(unzip = "internal"); devtools::install_github("brucemoran/somenone")'
+    ##install somenone
+    /opt/miniconda/envs/somatic_n-of-1/bin/R --slave -e 'options(unzip = "internal"); devtools::install_github("brucemoran/somenone", ref = "dev")'
 
     ##mv bbmap adapters to plain-named file
     cp /opt/miniconda/envs/somatic_n-of-1/opt/bbmap-*/resources/adapters.fa /opt/miniconda/envs/somatic_n-of-1/opt/bbmap-adapters.fa

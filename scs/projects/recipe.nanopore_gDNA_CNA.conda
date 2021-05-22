@@ -26,4 +26,3 @@ From:bruce.moran/default/bases:centos7_conda
     cd /opt/miniconda/envs/nanopore_gDNA_CNA/share
     wget https://mirror.oxfordnanoportal.com/software/analysis/ont-guppy-cpu-3.4.4-1.el7.x86_64.rpm
     yum install -y ont-guppy-cpu-3.4.4-1.el7.x86_64.rpm
-    

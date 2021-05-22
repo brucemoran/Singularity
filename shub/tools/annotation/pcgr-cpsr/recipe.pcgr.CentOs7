@@ -1,0 +1,43 @@
+Bootstrap:shub
+From:brucemoran/Singularity:centos7-conda
+
+%help
+    Container for PCGR
+
+%environment
+
+    export PATH=$PATH:/usr/local/pcgr:/usr/local/pcgr/src:/usr/local/pcgr/src/pcgr:/usr/local/pcgr/src/pcgr/lib:/usr/local/cpsr:/usr/local/miniconda/bin
+    export PERL5LIB=/usr/local/miniconda/envs/pcgr/lib/site_perl/5.26.2:/usr/local/miniconda/envs/pcgr/lib/site_perl/5.26.2/x86_64-linux-thread-multi
+
+    source /etc/profile.d/conda.sh
+    conda activate pcgr
+
+%post
+
+    ##source and install required
+    source /etc/profile.d/conda.sh
+    /usr/local/miniconda/bin/pip install toml pandas
+
+    ##pcgr git
+    cd /usr/local
+    git clone https://github.com/sigven/pcgr
+    cd pcgr
+    git reset --hard ac0c8d2badcc64c3ad26d812ed06989815774ace
+
+    ##cpsr git
+    cd /usr/local
+    git clone https://github.com/sigven/cpsr
+    cd cpsr
+    git reset --hard b5644c54aad99d272937b5cc7c65385a185fa6e9
+
+    cd /usr/local
+    conda create -y -n pcgr -c conda-forge -c bioconda -c pcgr pcgr
+    conda clean -y -a
+    conda activate pcgr
+
+    ##install R packages
+    chmod 777 /usr/local/miniconda/envs/pcgr/lib/R/library
+
+    #BiocManager to install packages, then install
+    R --slave -e 'install.packages("BiocManager", repos="http://cran.us.r-project.org")'
+    /usr/local/miniconda/envs/pcgr/bin/R --slave -e 'library("BiocManager"); BiocManager::install(c("devtools", "UpSetR", "ggpubr", "GenomeInfoDb", "BSgenome.Hsapiens.UCSC.hg19", "BSgenome.Hsapiens.UCSC.hg38"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
