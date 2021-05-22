@@ -31,6 +31,8 @@ fi
 
 buildn=${dir}/${typf}$(echo ${file##*/} | sed 's/recipe.//')".img"
 echo "Build into ${buildn}..."
-singularity build ${buildn} ${file}
+if [[ ! $4 == "dryrun" ]]; then
+  singularity build ${buildn} ${file}
+fi
 
 rm -rf singtmp
