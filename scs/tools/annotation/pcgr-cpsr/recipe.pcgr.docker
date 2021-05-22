@@ -14,14 +14,14 @@ From:sigven/pcgr:0.9.1
     ##clone pcgr, cpsr
     cd /usr/local
     git clone https://github.com/sigven/pcgr && cd pcgr
-    git reset --hard 6242469a7085f980822c1d3ad8b8109edd323cdd
+    git reset --hard 1a258bec71d13015421f3176f8aa99a247fff31e
     mkdir -p /usr/local/share/loftee/{src,splice_data/donor_motifs,maxEntScan/splicemodels}
     cp -r /usr/local/pcgr/src/* /usr/local/share/loftee/
     tar -xf /usr/local/share/loftee/loftee.tgz
 
     cd /usr/local
     git clone https://github.com/sigven/cpsr && cd cpsr
-    git reset --hard 65b26642e67cf15748ba1561a28ddf0827c403f9
+    git reset --hard 0e91907b71b519d0abb87a4d1a462c7ba9c56f1d
 
     #BiocManager to install packages, then install
     R --slave -e 'install.packages("BiocManager", repos="http://cran.us.r-project.org")'
