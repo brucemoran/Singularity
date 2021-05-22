@@ -25,7 +25,7 @@ file=$(find singtmp | grep ${type} | grep ${recipe})
 echo "Found $file, building..."
 
 ##create naming structure for scs
-if [[ type="scs" ]]; then
+if [[ type == "scs" ]]; then
   typf="bruce.moran-default-"$(echo $file | perl -ane '@s=split("scs/", $F[0]); print "$s[1]\n";' | sed "s/${recipe}//" | sed 's/\//-/g')
 fi
 
