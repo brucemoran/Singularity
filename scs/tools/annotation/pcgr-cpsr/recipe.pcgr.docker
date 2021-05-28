@@ -22,7 +22,8 @@ From:sigven/pcgr:0.9.1
     cd /usr/local
     git clone https://github.com/sigven/cpsr && cd cpsr
     git reset --hard 0e91907b71b519d0abb87a4d1a462c7ba9c56f1d
-
+    ln -s /usr/local/cpsr/src/cpsr_functions.R /usr/local/cpsr/cpsr.R
+    
     #BiocManager to install packages, then install
     R --slave -e 'install.packages("BiocManager", repos="http://cran.us.r-project.org")'
     R --slave -e 'library("BiocManager"); BiocManager::install(c("devtools", "UpSetR", "ggpubr", "GenomeInfoDb", "BSgenome.Hsapiens.UCSC.hg19", "BSgenome.Hsapiens.UCSC.hg38"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
