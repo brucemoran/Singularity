@@ -7,9 +7,9 @@ From:sigven/pcgr:0.9.1
 
 %environment
 
-    export PATH="/usr/bin:/usr/local/bin:/usr/local/pcgr:/usr/local/cpsr:$PATH"
-    export PERL5LIB="/usr/share/perl5"
-    
+    export PATH="/usr/bin:/usr/local/bin:/usr/local/pcgr:/usr/local/cpsr:/usr/local/pcgr/src/:$PATH"
+    export PERL5LIB="/opt/vep/src/ensembl-vep"
+
 %post
 
     ##clone pcgr, cpsr
@@ -23,7 +23,6 @@ From:sigven/pcgr:0.9.1
     cd /usr/local
     git clone https://github.com/sigven/cpsr && cd cpsr
     git reset --hard 0e91907b71b519d0abb87a4d1a462c7ba9c56f1d
-    ln -s /usr/local/cpsr/src/cpsr_functions.R /usr/local/cpsr/cpsr.R
 
     #BiocManager to install packages, then install
     R --slave -e 'install.packages("BiocManager", repos="http://cran.us.r-project.org")'
