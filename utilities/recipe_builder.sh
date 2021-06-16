@@ -9,30 +9,35 @@
 recipe=$1;
 dir=$2;
 
-##set type to scs as this still exists, but allow changing using $3
-if [[ ! $3 =~ "^s" ]]; then
-  type="scs"
-fi
+if [[ $1 =~ "^-h" | $1 =~ "^--h" | $1 == "" ]]; then
+  echo -e "Usage:\nsh recipe_builder.sh <recipe.file> <path/to/output/dir>\n"
+  echo -e "Optional:\n<scs/shub>"
+else {
+  ##set type to scs as this still exists, but allow changing using $3
+  if [[ ! $3 =~ "^s" ]]; then
+    type="scs"
+  fi
 
-if [[ $3 =~ "shub" ]]; then
-  type="shub"
-  typf="brucemoran-Singularity-"
-fi
+  if [[ $3 =~ "shub" ]]; then
+    type="shub"
+    typf="brucemoran-Singularity-"
+  fi
 
-##download git repo and get file, build
-git clone https://github.com/brucemoran/Singularity "singtmp"
-file=$(find singtmp | grep ${type} | grep ${recipe})
-echo "Found $file, building..."
+  ##download git repo and get file, build
+  git clone https://github.com/brucemoran/Singularity "singtmp"
+  file=$(find singtmp | grep ${type} | grep ${recipe})
+  echo "Found $file, building..."
 
-##create naming structure for scs
-if [[ ${type} == "scs" ]]; then
-  typf="bruce.moran-default-"$(echo $file | perl -ane '@s=split("scs/", $F[0]); print "$s[1]\n";' | sed "s/${recipe}//" | sed 's/\//-/g')
-fi
+  ##create naming structure for scs
+  if [[ ${type} == "scs" ]]; then
+    typf="bruce.moran-default-"$(echo $file | perl -ane '@s=split("scs/", $F[0]); print "$s[1]\n";' | sed "s/${recipe}//" | sed 's/\//-/g')
+  fi
 
-buildn=${dir}/${typf}$(echo ${file##*/} | sed 's/recipe.//')".img"
-echo "Build into ${buildn}..."
-if [[ ! $4 == "dryrun" ]]; then
-  singularity build ${buildn} ${file}
-fi
+  buildn=${dir}/${typf}$(echo ${file##*/} | sed 's/recipe.//')".img"
+  echo "Build into ${buildn}..."
+  if [[ ! $4 == "dryrun" ]]; then
+    singularity build ${buildn} ${file}
+  fi
 
-rm -rf singtmp
+  rm -rf singtmp
+}
