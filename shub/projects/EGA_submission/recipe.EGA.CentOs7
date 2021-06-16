@@ -6,8 +6,6 @@ From:centos:centos7.4.1708
 
 %environment
 
-    export PATH="/home/bmoran/.aspera/connect/bin:$PATH"
-
 %post
 
     ##java jdk 8, aspera dependencies
@@ -22,11 +20,9 @@ From:centos:centos7.4.1708
                    unzip \
                    which
 
-    cd /usr/local
-
     ##EGAcryptor
-    wget https://ega-archive.org/files/EgaCryptor.zip
-    unzip EgaCryptor.zip
+    wget -O /usr/local/EgaCryptor.zip https://ega-archive.org/files/EgaCryptor.zip
+    unzip /usr/local/EgaCryptor.zip
     mkdir /usr/local/jar
     ln -s /usr/local/EGA-Cryptor*/*jar /usr/local/jar/EGAcryptor.jar
 
