@@ -6,6 +6,8 @@ From:centos:centos7.4.1708
 
 %environment
 
+    export PATH="/home/bmoran/.aspera/connect/bin:$PATH"
+
 %post
 
     ##java jdk 8, aspera dependencies
@@ -20,17 +22,18 @@ From:centos:centos7.4.1708
                    unzip \
                    which
 
-    ##EGAcryptor
     cd /usr/local
-    wget -O /usr/local/EgaCryptor.zip https://ega-archive.org/files/EgaCryptor.zip
-    unzip /usr/local/EgaCryptor.zip
+
+    ##EGAcryptor
+    wget https://ega-archive.org/files/EgaCryptor.zip
+    unzip EgaCryptor.zip
     mkdir /usr/local/jar
     ln -s /usr/local/EGA-Cryptor*/*jar /usr/local/jar/EGAcryptor.jar
 
     ##aspera
-    cd /usr/local
     wget https://download.asperasoft.com/download/sw/connect/3.9.9/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
     tar -xf ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
-    ls
-    sed -i 's#INSTALL_DIR=~/.aspera/connect#INSTALL_DIR=/usr/local#' ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
-    sh ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
+    ls /usr/local
+    sed -i 's/#INSTALL_DIR=~/.aspera/connect#INSTALL_DIR=/usr/local/bin# /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
+
+    sh /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
