@@ -21,14 +21,16 @@ From:centos:centos7.4.1708
                    which
 
     ##EGAcryptor
+    cd /usr/local
     wget -O /usr/local/EgaCryptor.zip https://ega-archive.org/files/EgaCryptor.zip
     unzip /usr/local/EgaCryptor.zip
     mkdir /usr/local/jar
     ln -s /usr/local/EGA-Cryptor*/*jar /usr/local/jar/EGAcryptor.jar
 
     ##aspera
-    wget -O /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz https://download.asperasoft.com/download/sw/connect/3.9.9/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
-    tar -xf -C /usr/local /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
-    ls /usr/local
-    sed -i 's#INSTALL_DIR=~/.aspera/connect#INSTALL_DIR=/usr/local#' /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
-    sh /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
+    cd /usr/local
+    wget https://download.asperasoft.com/download/sw/connect/3.9.9/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
+    tar -xf ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
+    ls
+    sed -i 's#INSTALL_DIR=~/.aspera/connect#INSTALL_DIR=/usr/local#' ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
+    sh ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
