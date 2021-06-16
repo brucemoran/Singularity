@@ -9,10 +9,10 @@
 recipe=$1;
 dir=$2;
 
-if [[ $1 =~ "^-h" | $1 =~ "^--h" | $1 == "" ]]; then
-  echo -e "Usage:\nsh recipe_builder.sh <recipe.file> <path/to/output/dir>\n"
-  echo -e "Optional:\n<scs/shub>"
-else {
+if [[ $1 =~ "^-h" || $1 =~ "^--h" || $1 == "" ]]; then
+  echo -ne "Usage:\nsh recipe_builder.sh <recipe.file> <path/to/output/dir> "
+  echo -e "optional: <scs/shub> <dryrun>"
+else
   ##set type to scs as this still exists, but allow changing using $3
   if [[ ! $3 =~ "^s" ]]; then
     type="scs"
@@ -33,11 +33,11 @@ else {
     typf="bruce.moran-default-"$(echo $file | perl -ane '@s=split("scs/", $F[0]); print "$s[1]\n";' | sed "s/${recipe}//" | sed 's/\//-/g')
   fi
 
-  buildn=${dir}/${typf}$(echo ${file##*/} | sed 's/recipe.//')".img"
+  buildn=${dir}/${typf}$(echo ${file##*/} | awk '{print tolower($0)}' | sed 's/recipe.//')".img"
   echo "Build into ${buildn}..."
   if [[ ! $4 == "dryrun" ]]; then
     singularity build ${buildn} ${file}
   fi
 
   rm -rf singtmp
-}
+fi
