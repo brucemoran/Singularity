@@ -33,6 +33,6 @@ From:centos:centos7.4.1708
     ##aspera
     wget https://download.asperasoft.com/download/sw/connect/3.9.9/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
     tar -xf ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
-    sed 's/#INSTALL_DIR=~/.aspera/connect#INSTALL_DIR=/usr/local/bin' /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh > 1
+    sed 's/#INSTALL_DIR=~/.aspera/connect#INSTALL_DIR=/usr/local/bin#' /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh > 1
     mv 1 /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
     sh /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
