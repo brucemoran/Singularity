@@ -36,7 +36,7 @@ else
   buildn=${dir}/${typf}$(echo ${file##*/} | awk '{print tolower($0)}' | sed 's/recipe.//')".img"
   echo "Build into ${buildn}..."
   if [[ ! $4 == "dryrun" ]]; then
-    singularity build --remote ${buildn} ${file}
+    singularity build ${buildn} ${file}
   fi
 
   rm -rf singtmp
