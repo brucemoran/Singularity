@@ -1,0 +1,30 @@
+Bootstrap:docker
+From:sigven/pcgr:0.9.2
+
+%help
+
+    Container for PCGR based on Docker
+
+%environment
+
+    export PATH="/usr/bin:/usr/local/bin:/usr/local/pcgr:/usr/local/cpsr:/usr/local/pcgr/src/:$PATH"
+    export PERL5LIB="/opt/vep/src/ensembl-vep"
+
+%post
+
+    ##clone pcgr, cpsr
+    cd /usr/local
+    git clone https://github.com/sigven/pcgr && cd pcgr
+    git reset --hard 4d5859f0fb5357ad3a05dfdcc6acc83afee2a01c
+    mkdir -p /usr/local/share/loftee/{src,splice_data/donor_motifs,maxEntScan/splicemodels}
+    cp -r /usr/local/pcgr/src/* /usr/local/share/loftee/
+    lofteetgz=$(ls /usr/local/share/loftee/loftee*tgz)
+    tar -xf ${lofteetgz}
+
+    cd /usr/local
+    git clone https://github.com/sigven/cpsr && cd cpsr
+    git reset --hard bfeaff3736955eb33dfa4dd0032c048c693ab9c8
+
+    #BiocManager to install packages, then install
+    R --slave -e 'install.packages("BiocManager", repos="http://cran.us.r-project.org")'
+    R --slave -e 'library("BiocManager"); BiocManager::install(c("devtools", "UpSetR", "ggpubr", "GenomeInfoDb", "BSgenome.Hsapiens.UCSC.hg19", "BSgenome.Hsapiens.UCSC.hg38"), dependencies=c("Depends", "Imports", "LinkingTo"), update=TRUE, ask=FALSE, build_vignettes = FALSE, clean=TRUE)'
