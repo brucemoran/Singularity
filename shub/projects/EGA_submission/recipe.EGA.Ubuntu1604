@@ -1,0 +1,39 @@
+Bootstrap:docker
+From:ubuntu:ubuntu:16.04
+
+%help
+    Container for tools required to submit to EGA (European Genome-Phenome Archive)
+
+%environment
+
+    export PATH="/home/bmoran/.aspera/connect/bin:$PATH"
+
+%post
+
+    ##java jdk 8, aspera dependencies
+    apt-get install -y java-1.8.0-openjdk \
+                   libtool \
+                   perl-core \
+                   zlib-devel \
+                   openssl \
+                   mesa-libEGL \
+                   glib2 \
+                   wget \
+                   unzip \
+                   which
+
+    cd /usr/local
+
+    ##EGAcryptor
+    wget https://ega-archive.org/files/EgaCryptor.zip
+    unzip EgaCryptor.zip
+    mkdir /usr/local/jar
+    ln -s /usr/local/EGA-Cryptor*/*jar /usr/local/jar/EGAcryptor.jar
+
+    ##aspera
+    wget https://download.asperasoft.com/download/sw/connect/3.9.9/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
+    tar -xf ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.tar.gz
+    ls /usr/local
+    sed -i 's#INSTALL_DIR=~/.aspera/connect#INSTALL_DIR=/usr/local#' /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
+    grep INSTALL_DIR /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
+    sh /usr/local/ibm-aspera-connect-3.9.9.177872-linux-g2.12-64.sh
