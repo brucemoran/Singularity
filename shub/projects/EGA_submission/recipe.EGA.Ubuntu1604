@@ -1,5 +1,5 @@
 Bootstrap:docker
-From:ubuntu:ubuntu:16.04
+From:ubuntu:16.04
 
 %help
     Container for tools required to submit to EGA (European Genome-Phenome Archive)
